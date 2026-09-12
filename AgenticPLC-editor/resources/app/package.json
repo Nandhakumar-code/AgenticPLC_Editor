@@ -1,0 +1,14 @@
+{
+  "name": "open-plc-editor",
+  "version": "4.2.8",
+  "description": "AgenticPLC - IDE capable of creating programs for the AgenticPLC Runtime",
+  "license": "MIT",
+  "author": {
+    "name": "Autonomy Logic"
+  },
+  "main": "./dist/main/main.js",
+  "dependencies": {
+    "serialport": "^12.0.0",
+    "socket.io-client": "^4.8.1"
+  }
+}

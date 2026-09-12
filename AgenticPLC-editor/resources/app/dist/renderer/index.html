@@ -1,0 +1,1715 @@
+<!doctype html>
+<html class="h-full" lang="en" data-ai-theme="mixed">
+<head>
+  <title>AgenticPLC (src2)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'">
+  <script defer="defer" src="./renderer.js"></script>
+  <script defer="defer" src="./agentic_core.js"></script>
+  <link href="./style.css" rel="stylesheet">
+  <style id="global-theme-styles">
+    /* Global Application Theme Overrides */
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+    
+    /* MATERIAL 3 */
+    html[data-ai-theme="material3"] body, 
+    html[data-ai-theme="material3"] #root,
+    html[data-ai-theme="material3"] .bg-neutral-50,
+    html[data-ai-theme="material3"] .bg-neutral-100 {
+        background-color: #F3EDF7 !important;
+    }
+    html[data-ai-theme="material3"] .bg-white {
+        background-color: #FEF7FF !important;
+    }
+    html[data-ai-theme="material3"] .text-gray-500,
+    html[data-ai-theme="material3"] .text-neutral-500 {
+        color: #49454F !important;
+    }
+    html[data-ai-theme="material3"] .text-neutral-1000 {
+        color: #1D1B20 !important;
+    }
+    html[data-ai-theme="material3"] * {
+        font-family: 'Poppins', sans-serif !important;
+    }
+
+    /* MIXED MODE (Dark Neon) */
+    html[data-ai-theme="mixed"] body,
+    html[data-ai-theme="mixed"] #root,
+    html[data-ai-theme="mixed"] .dark\\:bg-neutral-950,
+    html[data-ai-theme="mixed"] .dark\\:bg-neutral-900,
+    html[data-ai-theme="mixed"] .dark\\:bg-neutral-850 {
+        background-color: #0f172a !important;
+    }
+    html[data-ai-theme="mixed"] .dark\\:border-neutral-800 {
+        border-color: #334155 !important;
+    }
+    html[data-ai-theme="mixed"] .dark\\:text-neutral-400 {
+        color: #cbd5e1 !important;
+    }
+    html[data-ai-theme="mixed"] .dark\\:text-white {
+        color: #38bdf8 !important;
+    }
+
+    /* AI Sidebar Themes */
+    :root {
+      --ai-bg: #1e1e1e;
+      --ai-text: #ccc;
+      --ai-border: #333;
+      --ai-primary: #007acc;
+      --ai-primary-text: #fff;
+      --ai-msg-bg-user: #007acc;
+      --ai-msg-text-user: #fff;
+      --ai-msg-bg-ai: #2a2d2e;
+      --ai-msg-text-ai: #ccc;
+      --ai-input-bg: #3c3c3c;
+      --ai-input-text: #fff;
+      --ai-input-border: #555;
+      --ai-tab-active: #fff;
+      --ai-tab-inactive: #888;
+      --ai-danger: #a00;
+      --ai-radius: 4px;
+      --ai-font: 'Inter', sans-serif;
+    }
+
+    [data-ai-theme="light"] {
+      --ai-bg: #f5f5f5;
+      --ai-text: #333;
+      --ai-border: #e0e0e0;
+      --ai-primary: #0078d4;
+      --ai-primary-text: #fff;
+      --ai-msg-bg-user: #0078d4;
+      --ai-msg-text-user: #fff;
+      --ai-msg-bg-ai: #ffffff;
+      --ai-msg-text-ai: #333;
+      --ai-input-bg: #ffffff;
+      --ai-input-text: #333;
+      --ai-input-border: #ccc;
+      --ai-tab-active: #000;
+      --ai-tab-inactive: #888;
+      --ai-danger: #d13438;
+      --ai-radius: 6px;
+    }
+
+    [data-ai-theme="material3"] {
+      --ai-bg: #F3EDF7;
+      --ai-text: #1D1B20;
+      --ai-border: #CAC4D0;
+      --ai-primary: #6750A4;
+      --ai-primary-text: #FFFFFF;
+      --ai-msg-bg-user: #6750A4;
+      --ai-msg-text-user: #FFFFFF;
+      --ai-msg-bg-ai: #EADDFF;
+      --ai-msg-text-ai: #21005D;
+      --ai-input-bg: #FFFFFF;
+      --ai-input-text: #1D1B20;
+      --ai-input-border: #79747E;
+      --ai-tab-active: #6750A4;
+      --ai-tab-inactive: #49454F;
+      --ai-danger: #B3261E;
+      --ai-radius: 16px;
+      --ai-font: 'Poppins', sans-serif;
+    }
+
+    [data-ai-theme="mixed"] {
+      --ai-bg: #0f172a;
+      --ai-text: #cbd5e1;
+      --ai-border: #334155;
+      --ai-primary: #38bdf8;
+      --ai-primary-text: #0f172a;
+      --ai-msg-bg-user: #38bdf8;
+      --ai-msg-text-user: #0f172a;
+      --ai-msg-bg-ai: #1e293b;
+      --ai-msg-text-ai: #f8fafc;
+      --ai-input-bg: #1e293b;
+      --ai-input-text: #f8fafc;
+      --ai-input-border: #475569;
+      --ai-tab-active: #38bdf8;
+      --ai-tab-inactive: #64748b;
+      --ai-danger: #ef4444;
+      --ai-radius: 12px;
+    }
+
+    #ai-sidebar {
+      background: var(--ai-bg);
+      color: var(--ai-text);
+      font-family: var(--ai-font);
+      border-left: 1px solid var(--ai-border);
+      transition: all 0.3s ease;
+      user-select: text !important;
+      -webkit-user-select: text !important;
+    }
+
+    .ai-header-btn {
+      background: transparent;
+      color: var(--ai-primary);
+      border: 1px solid var(--ai-primary);
+      border-radius: var(--ai-radius);
+      padding: 4px 10px;
+      cursor: pointer;
+      font-size: 11px;
+      transition: all 0.2s ease;
+    }
+    .ai-header-btn:hover {
+      background: var(--ai-primary);
+      color: var(--ai-primary-text);
+    }
+
+    .ai-bubble-user {
+      background: var(--ai-msg-bg-user);
+      color: var(--ai-msg-text-user);
+      border-radius: var(--ai-radius);
+      border-bottom-right-radius: 2px;
+      padding: 10px 14px;
+      align-self: flex-end;
+      max-width: 90%;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .ai-bubble-ai {
+      background: var(--ai-msg-bg-ai);
+      color: var(--ai-msg-text-ai);
+      border-radius: var(--ai-radius);
+      border-bottom-left-radius: 2px;
+      padding: 10px 14px;
+      align-self: flex-start;
+      max-width: 90%;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+    .ai-bubble-ai code {
+       background: rgba(127,127,127,0.2) !important;
+       color: inherit;
+    }
+
+    .ai-input {
+      background: var(--ai-input-bg);
+      color: var(--ai-input-text);
+      border: 1px solid var(--ai-input-border);
+      border-radius: var(--ai-radius);
+      transition: all 0.3s ease;
+    }
+    .ai-input:focus {
+      border-color: var(--ai-primary);
+      box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+    }
+
+    .ai-send-btn {
+      background: var(--ai-primary);
+      color: var(--ai-primary-text);
+      border-radius: var(--ai-radius);
+      border: none;
+      transition: all 0.3s ease;
+    }
+    .ai-send-btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+    
+    .ai-select {
+      background: var(--ai-bg);
+      color: var(--ai-text);
+      border: 1px solid var(--ai-border);
+      border-radius: var(--ai-radius);
+      font-size: 11px;
+      padding: 2px 5px;
+      outline: none;
+    }
+    .ai-msg-wrapper .ai-msg-tools {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease-in-out;
+    }
+    .ai-msg-wrapper:hover .ai-msg-tools {
+      opacity: 0.7;
+      visibility: visible;
+    }
+  </style>
+</head>
+<body class="h-full" style="display: flex; flex-direction: row; margin: 0; overflow: hidden;">
+  <div class="h-full bg-neutral-50 text-gray-500 dark:bg-neutral-950 dark:text-gray-400" id="root" style="flex: 1; min-width: 0; overflow: hidden; position: relative;"></div>
+  
+  <div id="ai-resizer" style="width: 5px; background: #252526; cursor: col-resize; z-index: 10000; flex-shrink: 0; transition: background 0.2s;"></div>
+  
+  <div id="ai-sidebar" style="width: 350px; min-width: 200px; max-width: 800px; display: flex; flex-direction: column; height: 100vh; overflow: hidden; position: relative; z-index: 9999; flex-shrink: 0;">
+    
+    <div style="padding: 15px; border-bottom: 1px solid var(--ai-border); display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; align-items: center; gap: 15px;">
+          <span id="tab-chat" style="font-weight: 600; font-size: 13px; cursor: pointer; color: var(--ai-tab-active); transition: color 0.2s;">CHAT</span>
+          <span id="tab-history" style="font-weight: 600; font-size: 13px; cursor: pointer; color: var(--ai-tab-inactive); transition: color 0.2s;">HISTORY</span>
+          <span id="tab-settings" style="font-weight: 600; font-size: 13px; cursor: pointer; color: var(--ai-tab-inactive); transition: color 0.2s;">⚙ SETTINGS</span>
+        </div>
+        <button id="ai-close-btn" style="background: transparent; color: var(--ai-text); border: none; cursor: pointer; font-size: 20px; line-height: 1; opacity: 0.7;">&times;</button>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <select id="ai-theme-select" class="ai-select">
+          <option value="material3">Material 3</option>
+          <option value="dark">Dark Mode</option>
+          <option value="light">Light Mode</option>
+          <option value="mixed">Mixed Mode</option>
+        </select>
+        <button id="ai-export-txt-btn" class="ai-header-btn" title="Export to Text File">📄 TXT</button>
+        <button id="ai-export-pdf-btn" class="ai-header-btn" title="Print to PDF">🖨️ PDF</button>
+        <button id="ai-new-chat-btn" class="ai-header-btn">+ New Chat</button>
+      </div>
+    </div>
+    
+    <div id="view-chat" style="display: flex; flex-direction: column; flex: 1; overflow: hidden;">
+      <div id="ai-chat-messages" style="flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; font-size: 13px; scroll-behavior: smooth;">
+        <div class="ai-bubble-ai">Hello! I am AgenticPLC's Autonomous Copilot. I can read your workspace, execute commands, and help you program! Check out the Settings tab to configure my API. How can I help you today?</div>
+      </div>
+      <div style="padding: 15px; border-top: 1px solid var(--ai-border); display: flex; flex-direction: column; gap: 8px; background: var(--ai-bg); z-index: 10;">
+        <div id="ai-status" role="status" aria-live="polite" style="display: none; font-size: 11px; opacity: 0.8;">Ready</div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <label style="cursor: pointer; padding: 5px; opacity: 0.8; transition: opacity 0.2s;" title="Attach Image or Text File" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.8">
+            <input type="file" id="ai-file-input" style="display: none;" multiple accept="image/*,.txt,.st,.js,.json,.md,.csv">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+          </label>
+          <div style="display: flex; flex-direction: column; flex: 1;">
+            <div id="ai-attachments-preview" style="display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 5px;"></div>
+            <input type="text" id="ai-chat-input" class="ai-input" placeholder="Ask AgenticPLC to program..." aria-label="Ask AgenticPLC Copilot" style="padding: 10px 14px; font-size: 13px; outline: none;">
+          </div>
+          <button id="ai-chat-btn" class="ai-btn">Send</button>
+          <button id="ai-stop-btn" class="ai-btn" style="background: var(--ai-danger); display: none;">Stop</button>
+        </div>
+      </div>
+    </div>
+    
+    <div id="view-history" style="display: none; flex-direction: column; flex: 1; overflow: hidden;">
+      <div style="padding: 10px 15px; border-bottom: 1px solid var(--ai-border); display: flex; justify-content: flex-end;">
+        <button id="ai-clear-history-btn" style="background: var(--ai-danger); color: white; border: none; padding: 6px 12px; border-radius: var(--ai-radius); cursor: pointer; font-size: 12px; transition: opacity 0.2s;">Delete All History</button>
+      </div>
+      <div id="ai-history-list" style="flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 15px; font-size: 13px;"></div>
+    </div>
+
+    <div id="view-settings" style="display: none; flex-direction: column; flex: 1; overflow-y: auto; padding: 15px; font-size: 13px; gap: 15px;">
+      <div style="color: var(--ai-text); font-weight: 600; margin-bottom: -5px;">API Configuration</div>
+      <p style="opacity: 0.8; font-size: 11px;">Switch to Gemini API for a generous free tier (15 requests/min) or Groq for ultra-fast reasoning.</p>
+      
+      <label style="display: flex; flex-direction: column; gap: 5px;">
+        Provider Preset:
+        <select id="setting-preset" class="ai-input" style="padding: 8px;">
+          <option value="gemini">Google Gemini (Free 15 RPM)</option>
+          <option value="groq">Groq API (Ultra-Fast)</option>
+          <option value="openrouter">OpenRouter Free Models</option>
+          <option value="nvidia">NVIDIA (Default, Rate Limited)</option>
+          <option value="custom">Local Ollama / Custom API</option>
+        </select>
+      </label>
+      
+      <label style="display: flex; flex-direction: column; gap: 5px;">
+        API URL:
+        <input type="text" id="setting-url" class="ai-input" style="padding: 8px;">
+      </label>
+      
+      <label style="display: flex; flex-direction: column; gap: 5px;">
+        API Key:
+        <input type="password" id="setting-key" class="ai-input" style="padding: 8px;" placeholder="Leave blank for local servers">
+      </label>
+      
+      <label style="display: flex; flex-direction: column; gap: 5px;">
+        Model Name:
+        <input type="text" id="setting-model" class="ai-input" style="padding: 8px;">
+      </label>
+
+      <label style="display: flex; flex-direction: column; gap: 5px;">
+        Fallback Providers (one JSON object per line):
+        <textarea id="setting-fallbacks" class="ai-input" rows="4" style="padding: 8px; resize: vertical;" placeholder='{"preset":"groq","url":"https://api.groq.com/openai/v1/chat/completions","key":"YOUR_GROQ_KEY","model":"llama-3.3-70b-versatile"}'></textarea>
+        <span style="opacity: 0.7; font-size: 11px;">Each fallback is tried at most once when the previous provider is rate-limited or unavailable.</span>
+      </label>
+      
+      <button id="ai-save-settings" class="ai-send-btn" style="padding: 10px; margin-top: 10px; font-weight: 600; cursor: pointer;">Save Settings</button>
+      <div id="settings-save-msg" style="color: #10b981; font-size: 12px; display: none;">Saved successfully!</div>
+    </div>
+  </div>
+  
+  <button id="ai-open-btn" style="display: none; position: fixed; bottom: 20px; right: 20px; background: var(--ai-primary); color: var(--ai-primary-text); border: none; border-radius: 50%; width: 56px; height: 56px; cursor: pointer; z-index: 10001; font-size: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); justify-content: center; align-items: center; transition: transform 0.2s;" title="Open AI Copilot">🤖</button>
+
+  <script>
+    // Global Theme Handler
+    const htmlEl = document.documentElement;
+    const themeSelect = document.getElementById('ai-theme-select');
+    
+    function applyGlobalTheme(theme, manual = true) {
+      themeSelect.value = theme;
+      htmlEl.setAttribute('data-ai-theme', theme);
+      // Always apply dark class to workspace for dark/mixed themes
+      if (theme === 'dark' || theme === 'mixed') { htmlEl.classList.add('dark'); } else { htmlEl.classList.remove('dark'); }
+      if (manual) {
+        localStorage.setItem('ai_theme', theme);
+      }
+    }
+
+    // One-time migration: force default theme to 'mixed' for both sidebar and workspace
+    if (!localStorage.getItem('ai_theme_v2_migrated')) {
+      localStorage.removeItem('ai_theme');
+      localStorage.setItem('theme', 'dark'); // Workspace uses 'theme' key - set to dark for mixed mode
+      localStorage.setItem('ai_theme_v2_migrated', '1');
+    }
+    // Also ensure workspace theme key is 'dark' if sidebar is 'mixed'
+    let savedTheme = localStorage.getItem('ai_theme') || 'mixed';
+    if (savedTheme === 'mixed' && localStorage.getItem('theme') !== 'dark') {
+      localStorage.setItem('theme', 'dark');
+    }
+    
+    // Apply sidebar theme immediately
+    applyGlobalTheme(savedTheme, true);
+    
+    // Re-apply after React framework finishes initializing (it may override our dark class)
+    setTimeout(() => {
+      const currentSaved = localStorage.getItem('ai_theme') || 'mixed';
+      applyGlobalTheme(currentSaved, false);
+    }, 500);
+    setTimeout(() => {
+      const currentSaved = localStorage.getItem('ai_theme') || 'mixed';
+      applyGlobalTheme(currentSaved, false);
+    }, 2000);
+
+    themeSelect.addEventListener('change', (e) => {
+      const theme = e.target.value;
+      applyGlobalTheme(theme, true);
+      // Sync workspace theme key
+      if (theme === 'dark' || theme === 'mixed') {
+        localStorage.setItem('theme', 'dark');
+      } else {
+        localStorage.setItem('theme', 'light');
+      }
+    });
+
+    // Auto-sync with workspace theme
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class') {
+          const isDark = htmlEl.classList.contains('dark');
+          const currentAiTheme = htmlEl.getAttribute('data-ai-theme');
+          if (isDark && currentAiTheme !== 'mixed' && currentAiTheme !== 'dark') {
+            applyGlobalTheme('mixed', false);
+          } else if (!isDark && (currentAiTheme === 'mixed' || currentAiTheme === 'dark')) {
+            applyGlobalTheme('light', false);
+          }
+        }
+      });
+    });
+    observer.observe(htmlEl, { attributes: true });
+
+    // Formatting Markdown
+    function formatMarkdown(text) {
+      let html = String(text == null ? '' : text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+      html = html.replace(/^### (.*$)/gim, '<br><strong style="font-size:1.1em;">$1</strong>');
+      html = html.replace(/^## (.*$)/gim, '<br><strong style="font-size:1.2em;">$1</strong>');
+      html = html.replace(/^# (.*$)/gim, '<br><strong style="font-size:1.3em;">$1</strong>');
+      html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+      html = html.replace(/^\* (.*$)/gim, '<div style="margin-left: 10px;">&bull; $1</div>');
+      html = html.replace(/^- (.*$)/gim, '<div style="margin-left: 10px;">&bull; $1</div>');
+      html = html.replace(/`(.*?)`/g, '<code style="padding:2px 4px;border-radius:3px;font-family:monospace;font-size:0.9em;background:rgba(127,127,127,0.2);">$1</code>');
+      html = html.replace(/\n/g, '<br>');
+      return html;
+    }
+    
+    // History Management
+    function readJsonStorage(key, fallback) {
+      try {
+        const value = JSON.parse(localStorage.getItem(key) || 'null');
+        return value === null ? fallback : value;
+      } catch (error) {
+        console.warn('Ignoring invalid AI storage value:', key, error);
+        return fallback;
+      }
+    }
+
+    let historyData = readJsonStorage('ai_history', []);
+    if (!Array.isArray(historyData)) historyData = [];
+    function saveHistory(prompt, responseHtml) {
+      historyData.push({ prompt, response: responseHtml, time: new Date().toLocaleString() });
+      localStorage.setItem('ai_history', JSON.stringify(historyData));
+      renderHistory();
+    }
+    function renderHistory() {
+      const list = document.getElementById('ai-history-list');
+      list.innerHTML = '';
+      if (historyData.length === 0) {
+        list.innerHTML = '<div style="opacity: 0.6; text-align: center; margin-top: 20px;">No history yet.</div>';
+        return;
+      }
+      historyData.forEach((item, index) => {
+        let div = document.createElement('div');
+        div.style.cssText = 'background: var(--ai-msg-bg-ai); color: var(--ai-msg-text-ai); padding: 12px; border-radius: var(--ai-radius); box-shadow: 0 1px 3px rgba(0,0,0,0.1);';
+        div.innerHTML = '<div style="color: var(--ai-primary); font-weight: bold; margin-bottom: 8px;">Q: ' + item.prompt + '</div><div style="margin-bottom: 12px; line-height: 1.5;">' + item.response + '</div><div style="display: flex; justify-content: space-between; font-size: 11px; opacity: 0.7; border-top: 1px solid var(--ai-border); padding-top: 8px;"><span>' + item.time + '</span><button onclick="deleteHistoryItem(' + index + ')" style="background: transparent; color: var(--ai-danger); border: none; cursor: pointer; font-weight: bold;">Delete</button></div>';
+        list.appendChild(div);
+      });
+    }
+    window.deleteHistoryItem = function(idx) {
+      historyData.splice(idx, 1);
+      localStorage.setItem('ai_history', JSON.stringify(historyData));
+      renderHistory();
+    };
+    document.getElementById('ai-clear-history-btn').addEventListener('click', () => {
+      historyData = [];
+      localStorage.setItem('ai_history', JSON.stringify(historyData));
+      renderHistory();
+    });
+    
+    // Tabs Navigation
+    function switchTab(activeId) {
+      ['chat', 'history', 'settings'].forEach(id => {
+        document.getElementById('tab-' + id).style.color = (activeId === id) ? 'var(--ai-tab-active)' : 'var(--ai-tab-inactive)';
+        document.getElementById('view-' + id).style.display = (activeId === id) ? 'flex' : 'none';
+      });
+      if(activeId === 'history') renderHistory();
+    }
+    document.getElementById('tab-chat').addEventListener('click', () => switchTab('chat'));
+    document.getElementById('tab-history').addEventListener('click', () => switchTab('history'));
+    document.getElementById('tab-settings').addEventListener('click', () => switchTab('settings'));
+    
+    document.getElementById('ai-export-txt-btn').addEventListener('click', () => {
+      let text = "AgenticPLC Copilot Session Log\n\n";
+      const msgs = document.getElementById('ai-chat-messages').children;
+      for (let i = 0; i < msgs.length; i++) {
+        const node = msgs[i];
+        const userMsg = node.querySelector ? node.querySelector('.ai-bubble-user') : null;
+        const aiMsg = node.querySelector ? node.querySelector('.ai-bubble-ai') : null;
+        const isUser = node.classList && node.classList.contains('ai-bubble-user');
+        const isAi = node.classList && node.classList.contains('ai-bubble-ai');
+        
+        if (userMsg || isUser) text += "USER: " + (userMsg ? userMsg.innerText : node.innerText) + "\n\n";
+        else if (aiMsg || isAi) text += "AI: " + (aiMsg ? aiMsg.innerText : node.innerText) + "\n\n";
+      }
+      const blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "AgenticPLC_Chat_Export.txt";
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById('ai-export-pdf-btn').addEventListener('click', () => {
+      window.print();
+    });
+
+    document.getElementById('ai-new-chat-btn').addEventListener('click', () => {
+      switchTab('chat');
+       document.getElementById('ai-chat-messages').innerHTML = '<div class="ai-bubble-ai">Hello! I am AgenticPLC\'s Autonomous Copilot. I can read your workspace, execute commands, and help you program! How can I help you today?</div>';
+      currentSessionMessages = [];
+    });
+    
+    // Settings Logic
+    const defaultSettings = {
+      preset: 'custom',
+      url: 'http://localhost:11434/v1/chat/completions',
+      key: '',
+      model: 'llama3.2'
+    };
+    
+    let apiSettings = readJsonStorage('ai_api_settings', defaultSettings);
+    if (!apiSettings || typeof apiSettings !== 'object') apiSettings = { ...defaultSettings };
+    
+    const elPreset = document.getElementById('setting-preset');
+    const elUrl = document.getElementById('setting-url');
+    const elKey = document.getElementById('setting-key');
+    const elModel = document.getElementById('setting-model');
+    const elFallbacks = document.getElementById('setting-fallbacks');
+    
+    function populateSettingsUI() {
+      elPreset.value = apiSettings.preset || 'custom';
+      elUrl.value = apiSettings.url;
+      elKey.value = (apiSettings.key === defaultSettings.key) ? '' : apiSettings.key;
+      elModel.value = apiSettings.model;
+      elFallbacks.value = (Array.isArray(apiSettings.fallbacks) ? apiSettings.fallbacks : []).map(item => JSON.stringify(item)).join('\n');
+    }
+    populateSettingsUI();
+    
+    elPreset.addEventListener('change', (e) => {
+      const val = e.target.value;
+      if (val === 'gemini') {
+        elUrl.value = 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions';
+        elModel.value = 'gemini-2.5-pro';
+      } else if (val === 'groq') {
+        elUrl.value = 'https://api.groq.com/openai/v1/chat/completions';
+        elModel.value = 'llama-3.3-70b-versatile';
+      } else if (val === 'openrouter') {
+        elUrl.value = 'https://openrouter.ai/api/v1/chat/completions';
+        elModel.value = 'openrouter/free';
+      } else if (val === 'nvidia') {
+        elUrl.value = 'https://integrate.api.nvidia.com/v1/chat/completions';
+        elModel.value = 'meta/llama-3.1-70b-instruct';
+      } else if (val === 'custom') {
+        elUrl.value = 'http://localhost:11434/v1/chat/completions';
+        elModel.value = 'llama3';
+      }
+    });
+    
+    document.getElementById('ai-save-settings').addEventListener('click', () => {
+      let keyToSave = elKey.value;
+      let fallbackProviders = [];
+      const fallbackLines = elFallbacks.value.split(/\r?\n/).map(line => line.trim()).filter(Boolean);
+      try {
+        fallbackProviders = fallbackLines.map(line => JSON.parse(line)).filter(item => item && item.url && item.model);
+      } catch (error) {
+        elFallbacks.style.borderColor = 'var(--ai-danger)';
+        elFallbacks.title = 'Each fallback must be valid JSON on its own line.';
+        return;
+      }
+      apiSettings = {
+        preset: elPreset.value,
+        url: elUrl.value,
+        key: keyToSave,
+        model: elModel.value,
+        fallbacks: fallbackProviders
+      };
+      elFallbacks.style.borderColor = '';
+      localStorage.setItem('ai_api_settings', JSON.stringify(apiSettings));
+      const msg = document.getElementById('settings-save-msg');
+      msg.style.display = 'block';
+      setTimeout(() => msg.style.display = 'none', 2000);
+    });
+    
+    // Chat & Agent Logic
+    let currentSessionMessages = [];
+    
+    const aiTools = [
+      {
+        type: 'function',
+        function: {
+          name: 'listAppCommands',
+          description: 'Get a list of all available commands and methods you can execute on the editor via window.bridge.',
+          parameters: { type: 'object', properties: { _dummy: { type: 'string', description: 'Ignore this parameter' } } }
+        }
+      },
+      {
+        type: 'function',
+        function: {
+          name: 'openProject',
+          description: 'Open an AgenticPLC project by its name or full path. Use this directly for requests such as open LED Blink project.',
+          parameters: { type: 'object', properties: { project: { type: 'string' } }, required: ['project'] }
+        }
+      },
+      {
+        type: 'function',
+        function: {
+          name: 'getWorkspaceContext',
+          description: 'Get information about the current workspace, including paths, environment, and user state.',
+          parameters: { type: 'object', properties: { _dummy: { type: 'string', description: 'Ignore this parameter' } } }
+        }
+      },
+      {
+        type: 'function',
+        function: {
+          name: 'createPLCProject',
+          description: 'Create a new AgenticPLC project at a user-specified folder. Then open it in the live editor store.',
+          parameters: {
+            type: 'object',
+            properties: {
+              name: { type: 'string' },
+              path: { type: 'string', description: 'Parent folder where the project should be created. Default to C:/AgenticPLC_Projects if not specified.' },
+              language: { type: 'string', enum: ['st', 'il', 'ld', 'sfc', 'fbd'] }
+            },
+            required: ['name']
+          }
+        }
+      },
+      {
+        type: 'function',
+        function: {
+          name: 'readWorkspaceFile',
+          description: 'Read a text file from the currently open workspace. Use a workspace-relative path when possible.',
+          parameters: { type: 'object', properties: { path: { type: 'string' } }, required: ['path'] }
+        }
+      },
+      {
+        type: 'function',
+        function: {
+          name: 'listWorkspaceFiles',
+          description: 'List files and folders in the currently open workspace or a workspace-relative folder.',
+          parameters: { type: 'object', properties: { path: { type: 'string' } } }
+        }
+      },
+      {
+        type: 'function',
+        function: {
+          name: 'searchWorkspace',
+          description: 'Search the open workspace source files for a text query.',
+          parameters: { type: 'object', properties: { query: { type: 'string' } }, required: ['query'] }
+        }
+      },
+      {
+        type: 'function',
+        function: {
+          name: 'writeWorkspaceFile',
+          description: 'Create or update a text file inside the currently open workspace. Use only when the user asked to create or modify it.',
+          parameters: { type: 'object', properties: { path: { type: 'string' }, content: { type: 'string' } }, required: ['path', 'content'] }
+        }
+      },
+      {
+        type: 'function',
+        function: {
+          name: 'deleteWorkspacePath',
+          description: 'Delete a file or folder inside the workspace.',
+          parameters: { type: 'object', properties: { path: { type: 'string' } }, required: ['path'] }
+        }
+
+      },
+      // === AgenticCore Tools: Direct Editor Manipulation ===
+      {
+        type: 'function',
+        function: {
+          name: 'getProjectSummary',
+          description: 'Get a complete summary of the current project including all POUs, their variables, and code. Call this FIRST before making any changes so you understand the current state.',
+          parameters: { type: 'object', properties: { _dummy: { type: 'string', description: 'Ignore this parameter' } } }
+        }
+      },
+      {
+        type: 'function',
+        function: {
+          name: 'readCurrentPou',
+          description: 'Read a specific POU (Program Organization Unit) to see its variables and code.',
+          parameters: { type: 'object', properties: { pouName: { type: 'string', description: 'Name of the POU to read. Default: main' } } }
+        }
+      },
+      {
+        type: 'function',
+        function: {
+          name: 'addVariables',
+          description: 'Declare one or more variables in a POU. MUST be called BEFORE writeSTCode or buildLadderLogic that references these variables. Each variable needs a name, type (BOOL/INT/REAL/TIME/etc), and class (local/input/output).',
+          parameters: {
+            type: 'object',
+            properties: {
+              pouName: { type: 'string', description: 'Target POU name. Default: main' },
+              variables: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    name: { type: 'string', description: 'Variable name e.g. Start_Button' },
+                    dataType: { type: 'string', description: 'IEC type: BOOL, INT, REAL, TIME, DINT, WORD, etc. Default: BOOL' },
+                    class: { type: 'string', description: 'Variable class: input, output, local, inOut, external, temp. Default: local' },
+                    location: { type: 'string', description: 'Optional IEC address e.g. %IX0.0 for digital input' },
+                    initialValue: { type: 'string', description: 'Optional initial value e.g. FALSE, 0, T#1s' }
+                  },
+                  required: ['name']
+                },
+                description: 'Array of variable definitions'
+              }
+            },
+            required: ['variables']
+          }
+        }
+      },
+      {
+        type: 'function',
+        function: {
+          name: 'clearVariables',
+          description: 'Clear or delete ALL variables from a POU. Use this when the user wants to delete variables, start fresh, or clear the current variables before adding new ones.',
+          parameters: {
+            type: 'object',
+            properties: {
+              pouName: { type: 'string', description: 'Target POU name. Default: main' }
+            }
+          }
+        }
+      },
+      {
+        type: 'function',
+        function: {
+          name: 'createPou',
+          description: 'Create a completely new POU (Program, Function, or Function Block) in the project.',
+          parameters: {
+            type: 'object',
+            properties: {
+              name: { type: 'string', description: 'Name of the new POU' },
+              pouType: { type: 'string', description: 'Type of POU (PROGRAM, FUNCTION, or FUNCTION_BLOCK)' },
+              language: { type: 'string', description: 'Programming language (e.g., st)' }
+            },
+            required: ['name', 'pouType']
+          }
+        }
+      },
+      {
+        type: 'function',
+        function: {
+          name: 'deletePou',
+          description: 'Delete an existing POU from the project.',
+          parameters: {
+            type: 'object',
+            properties: {
+              name: { type: 'string', description: 'Name of the POU to delete' }
+            },
+            required: ['name']
+          }
+        }
+      },
+      {
+        type: 'function',
+        function: {
+          name: 'renamePou',
+          description: 'Rename an existing POU in the project.',
+          parameters: {
+            type: 'object',
+            properties: {
+              oldName: { type: 'string', description: 'Current name of the POU' },
+              newName: { type: 'string', description: 'New name for the POU' }
+            },
+            required: ['oldName', 'newName']
+          }
+        }
+
+      },
+      {
+        type: 'function',
+        function: {
+          name: 'clearSTCode',
+          description: 'Clear all Structured Text code from a POU, making it completely empty. Use this when you need to delete ST code.',
+          parameters: {
+            type: 'object',
+            properties: {
+              pouName: { type: 'string', description: 'Target POU name. Default: main' }
+            }
+          }
+        }
+      },
+      {
+        type: 'function',
+        function: {
+          name: 'writeSTCode',
+          description: 'Write Structured Text (IEC 61131-3 ST) code into a POU. This replaces the entire body of the POU. Write complete, valid ST code.',
+          parameters: {
+            type: 'object',
+            properties: {
+              pouName: { type: 'string', description: 'Target POU name. Default: main' },
+              code: { type: 'string', description: 'Complete ST code body. Use \\n for newlines. Do NOT include PROGRAM/END_PROGRAM wrapper or VAR blocks - only the executable body.' }
+            },
+            required: ['code']
+          }
+        }
+      },
+      {
+        type: 'function',
+        function: {
+          name: 'buildLadderLogic',
+          description: 'Insert multiple ladder logic elements (contacts, coils, timers) into a rung. Variables must already exist - call addVariables first!',
+          parameters: {
+            type: 'object',
+            properties: {
+              pouName: { type: 'string', description: 'Target POU name. Default: main' },
+              nodes: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    elementType: { type: 'string', description: 'Element type: contact, coil, timer, functionBlock' },
+                    name: { type: 'string', description: 'Variable name to bind to this element' },
+                    variant: { type: 'string', description: 'Optional variant: default, negated, risingEdge, fallingEdge, set, reset' }
+                  },
+                  required: ['elementType', 'name']
+                },
+                description: 'Array of ladder elements to insert, in order from left to right'
+              }
+            },
+            required: ['nodes']
+          }
+        }
+      },
+      {
+        type: 'function',
+        function: {
+          name: 'compileProject',
+          description: 'Compile the current project. Returns compilation output with success/error status. Call this after writing code to verify correctness.',
+          parameters: { type: 'object', properties: { _dummy: { type: 'string', description: 'Ignore this parameter' } } }
+        }
+      },
+      {
+        type: 'function',
+        function: {
+          name: 'simulateProject',
+          description: 'Load the compiled project into the local PLC simulator and start running it.',
+          parameters: { type: 'object', properties: { _dummy: { type: 'string', description: 'Ignore this parameter' } } }
+        }
+      },
+      {
+        type: 'function',
+        function: {
+          name: 'stopSimulation',
+          description: 'Stop the running PLC simulator.',
+          parameters: { type: 'object', properties: { _dummy: { type: 'string', description: 'Ignore this parameter' } } }
+        }
+      }
+    ];
+    
+     let isSending = false;
+     const aiStatus = document.getElementById('ai-status');
+     const sendButton = document.getElementById('ai-chat-btn');
+     function setAiStatus(text, visible = true) {
+       aiStatus.textContent = text;
+       aiStatus.style.display = visible ? 'block' : 'none';
+     }
+     function requestWorkspacePermission(action, detail) {
+      return new Promise((resolve) => {
+        const msgs = document.getElementById('ai-chat-messages');
+        const bubble = document.createElement('div');
+        bubble.className = 'ai-bubble-ai';
+        bubble.style.border = '1px solid var(--ai-border, #444)';
+        bubble.style.padding = '12px';
+        bubble.style.marginTop = '10px';
+        bubble.style.borderRadius = '6px';
+        
+        const title = document.createElement('div');
+        title.textContent = 'Ready to Apply: ' + action;
+        title.style.fontWeight = 'bold';
+        title.style.marginBottom = '10px';
+        title.style.color = 'var(--ai-accent, #3b82f6)';
+        
+        const pre = document.createElement('pre');
+        pre.style.background = 'var(--ai-user-bubble, #2d2d2d)';
+        pre.style.padding = '10px';
+        pre.style.borderRadius = '4px';
+        pre.style.fontSize = '12px';
+        pre.style.overflowX = 'auto';
+        pre.style.whiteSpace = 'pre-wrap';
+        pre.style.maxHeight = '250px';
+        pre.style.overflowY = 'auto';
+        pre.textContent = detail;
+        
+        const btnContainer = document.createElement('div');
+        btnContainer.style.display = 'flex';
+        btnContainer.style.gap = '10px';
+        btnContainer.style.marginTop = '12px';
+        
+        const btnApply = document.createElement('button');
+        btnApply.innerHTML = '&#9999;&#65039; Apply to Editor';
+        btnApply.style.padding = '6px 12px';
+        btnApply.style.background = 'var(--ai-accent, #3b82f6)';
+        btnApply.style.color = 'white';
+        btnApply.style.border = 'none';
+        btnApply.style.borderRadius = '4px';
+        btnApply.style.cursor = 'pointer';
+        btnApply.style.fontWeight = 'bold';
+        
+        const btnReject = document.createElement('button');
+        btnReject.textContent = 'Reject';
+        btnReject.style.padding = '6px 12px';
+        btnReject.style.background = 'transparent';
+        btnReject.style.color = 'var(--ai-text, #fff)';
+        btnReject.style.border = '1px solid var(--ai-border, #555)';
+        btnReject.style.borderRadius = '4px';
+        btnReject.style.cursor = 'pointer';
+        
+        btnApply.onclick = () => {
+          btnApply.disabled = true;
+          btnApply.innerHTML = '&#10004;&#65039; Applied';
+          btnReject.style.display = 'none';
+          resolve(true);
+        };
+        
+        btnReject.onclick = () => {
+          btnReject.disabled = true;
+          btnReject.textContent = 'Rejected';
+          btnApply.style.display = 'none';
+          resolve(false);
+        };
+        
+        btnContainer.appendChild(btnApply);
+        btnContainer.appendChild(btnReject);
+        
+        bubble.appendChild(title);
+        bubble.appendChild(pre);
+        bubble.appendChild(btnContainer);
+        
+        msgs.appendChild(bubble);
+        msgs.scrollTop = msgs.scrollHeight;
+      });
+    }
+     function parseJsonOrDefault(value, fallback) {
+       try { return value ? JSON.parse(value) : fallback; } catch (error) { return fallback; }
+     }
+     function parseAgentVariables(source) {
+       const variables = [];
+       const block = /\bVAR(?:_INPUT|_OUTPUT|_IN_OUT|_GLOBAL)?\b([\s\S]*?)END_VAR/gi;
+       let match;
+       while ((match = block.exec(source))) {
+         for (const line of match[1].split(/\r?\n/)) {
+           const item = line.trim().match(/^([A-Za-z_]\w*)\s*:\s*([^;:=]+)(?:\s*:=\s*([^;]+))?;/);
+           if (item) variables.push({ name: item[1], type: item[2].trim(), initialValue: item[3]?.trim() });
+         }
+       }
+       return variables;
+     }
+     function normalizeAgentProjectResponse(raw) {
+       if (!raw || !raw.success || !raw.data) return raw;
+       const data = raw.data;
+       const content = data.content || data;
+       // Already-normalized responses can pass through unchanged.
+       if (content.projectData && content.meta) return raw;
+       const project = parseJsonOrDefault(content.projectJson, { meta: {}, data: {} });
+       const projectData = project.data || {};
+       const pouFiles = Array.isArray(content.pouFiles) ? content.pouFiles : [];
+       const pous = pouFiles.map(file => {
+         const relativePath = String(file.relativePath || file.path || '');
+         const fileName = relativePath.split(/[\\/]/).pop() || 'main.st';
+         const dot = fileName.lastIndexOf('.');
+         const name = dot > 0 ? fileName.slice(0, dot) : fileName;
+         const extension = dot > 0 ? fileName.slice(dot).toLowerCase() : '.st';
+         const folder = relativePath.toLowerCase();
+         const pouType = folder.includes('function_blocks') || folder.includes('function-blocks') ? 'function-block' : folder.includes('functions') ? 'function' : 'program';
+         const language = extension === '.il' ? 'il' : extension === '.ld' ? 'ld' : extension === '.fbd' ? 'fbd' : extension === '.sfc' ? 'sfc' : extension === '.py' ? 'py' : 'st';
+         let value = String(file.content ?? '');
+         if ((language === 'ld' || language === 'fbd') && value.trim()) value = parseJsonOrDefault(value, value);
+         return { name, pouType, interface: { variables: parseAgentVariables(String(file.content ?? '')) }, body: { language, value }, documentation: '' };
+       });
+       const deviceConfig = parseJsonOrDefault(content.deviceConfig, {});
+       const pinMapping = parseJsonOrDefault(content.pinMapping, {});
+       return {
+         success: true,
+         data: {
+           meta: { name: project.meta?.name || '', type: project.meta?.type || 'plc-project', path: data.projectPath || data.meta?.path || '' },
+           projectData: {
+             dataTypes: projectData.dataTypes || [],
+             pous,
+             configurations: projectData.configuration || projectData.configurations || { resource: { tasks: [], instances: [], globalVariables: [] } },
+             servers: projectData.servers || [],
+             remoteDevices: projectData.remoteDevices || [],
+             libraries: projectData.libraries || [],
+             debugVariables: projectData.debugVariables || {}
+           },
+           deviceConfiguration: deviceConfig,
+           devicePinMapping: pinMapping
+         }
+       };
+     }
+     async function openProjectInEditor(project) {
+       const state = window.__ROOT_STORE__ || null;
+       if (state && state.workspace && state.workspace.editingState === 'unsaved' && !(await requestWorkspacePermission('Open project', 'There are unsaved editor changes.'))) {
+         throw new Error('Opening was cancelled because unsaved changes were not approved.');
+       }
+       const openResult = normalizeAgentProjectResponse(await window.bridge.agentOpenProject(project));
+       if (!openResult || !openResult.success || !openResult.data) {
+         const reason = openResult && openResult.error ? (openResult.error.description || openResult.error.title || String(openResult.error)) : 'The project could not be opened.';
+         throw new Error(reason);
+       }
+       // __ROOT_STORE__ IS the state directly (Zustand exposes it this way)
+       if (!state || !state.sharedWorkspaceActions || typeof state.sharedWorkspaceActions.handleOpenProjectResponse !== 'function') {
+         // Fallback: try getState() in case the store API changed
+         const fallbackState = state && typeof state.getState === 'function' ? state.getState() : null;
+         if (fallbackState && fallbackState.sharedWorkspaceActions && typeof fallbackState.sharedWorkspaceActions.handleOpenProjectResponse === 'function') {
+           fallbackState.sharedWorkspaceActions.handleOpenProjectResponse(openResult.data);
+           return { success: true, editorUpdated: true, projectPath: openResult.data.meta?.path || project };
+         }
+         throw new Error('The editor store is not ready to load the project.');
+       }
+       state.sharedWorkspaceActions.handleOpenProjectResponse(openResult.data);
+       return { success: true, editorUpdated: true, projectPath: openResult.data.meta?.path || project };
+     }
+
+    let pendingAttachments = [];
+    const fileInput = document.getElementById('ai-file-input');
+    const previewContainer = document.getElementById('ai-attachments-preview');
+
+    function renderAttachments() {
+      previewContainer.innerHTML = '';
+      pendingAttachments.forEach((att, idx) => {
+        const div = document.createElement('div');
+        div.style.cssText = 'background: var(--ai-msg-bg-ai); color: var(--ai-msg-text-ai); padding: 2px 8px; border-radius: 12px; font-size: 10px; display: flex; align-items: center; gap: 5px;';
+        div.innerHTML = `<span>${att.name}</span><button style="background:none;border:none;color:var(--ai-danger);cursor:pointer;padding:0;font-size:12px;" onclick="pendingAttachments.splice(${idx}, 1); renderAttachments();">&times;</button>`;
+        previewContainer.appendChild(div);
+      });
+    }
+
+    fileInput.addEventListener('change', async (e) => {
+      for (const file of e.target.files) {
+        if (file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            pendingAttachments.push({ type: 'image', name: file.name, data: ev.target.result });
+            renderAttachments();
+          };
+          reader.readAsDataURL(file);
+        } else {
+          const text = await file.text();
+          pendingAttachments.push({ type: 'text', name: file.name, data: text });
+          renderAttachments();
+        }
+      }
+      fileInput.value = '';
+    });
+
+    // Global stop variables
+    let isAIStopped = false;
+    let currentAbortController = null;
+    document.getElementById('ai-stop-btn').addEventListener('click', () => {
+      isAIStopped = true;
+      if (currentAbortController) currentAbortController.abort();
+    });
+
+     document.getElementById('ai-chat-btn').addEventListener('click', async function() {
+       var input = document.getElementById('ai-chat-input');
+       var msgs = document.getElementById('ai-chat-messages');
+       var prompt = input.value.trim();
+       if ((prompt !== '' || pendingAttachments.length > 0) && !isSending) {
+         isSending = true;
+         isAIStopped = false;
+         sendButton.disabled = true;
+         sendButton.style.opacity = '0.65';
+         document.getElementById('ai-stop-btn').style.display = 'inline-block';
+         var uWrapper = document.createElement('div');
+         uWrapper.className = 'ai-msg-wrapper';
+         uWrapper.style.display = 'flex';
+         uWrapper.style.flexDirection = 'column';
+         uWrapper.style.alignItems = 'flex-end';
+         
+         var uMsg = document.createElement('div');
+         uMsg.className = 'ai-bubble-user';
+         uMsg.textContent = prompt;
+         
+         var uTools = document.createElement('div');
+         uTools.className = 'ai-msg-tools';
+         uTools.style.display = 'flex';
+         uTools.style.gap = '8px';
+         uTools.style.marginTop = '4px';
+         uTools.style.fontSize = '11px';
+         uTools.style.userSelect = 'none';
+         uTools.style.webkitUserSelect = 'none';
+         
+         var copyBtn = document.createElement('button');
+         copyBtn.textContent = 'Copy';
+         copyBtn.className = 'ai-header-btn';
+         copyBtn.style.padding = '2px 6px';
+         copyBtn.onclick = () => navigator.clipboard.writeText(prompt);
+         
+         var editBtn = document.createElement('button');
+         editBtn.textContent = 'Edit';
+         editBtn.className = 'ai-header-btn';
+         editBtn.style.padding = '2px 6px';
+         editBtn.onclick = () => { input.value = prompt; input.focus(); };
+         
+         uTools.appendChild(copyBtn);
+         uTools.appendChild(editBtn);
+         uWrapper.appendChild(uMsg);
+         uWrapper.appendChild(uTools);
+         msgs.appendChild(uWrapper);
+         
+         var aiWrapper = document.createElement('div');
+         aiWrapper.className = 'ai-msg-wrapper';
+         aiWrapper.style.display = 'flex';
+         aiWrapper.style.flexDirection = 'column';
+         aiWrapper.style.alignItems = 'flex-start';
+
+         var toolPillsContainer = document.createElement('div');
+         toolPillsContainer.style.display = 'flex';
+         toolPillsContainer.style.flexDirection = 'column';
+         toolPillsContainer.style.gap = '4px';
+         toolPillsContainer.style.marginBottom = '4px';
+
+         var aiMsg = document.createElement('div');
+         aiMsg.className = 'ai-bubble-ai';
+         aiMsg.innerHTML = '<span style="opacity:0.7; animation: pulse 1.5s infinite;">Thinking...</span>';
+         
+         var aiTools = document.createElement('div');
+         aiTools.className = 'ai-msg-tools';
+         aiTools.style.display = 'flex';
+         aiTools.style.gap = '8px';
+         aiTools.style.marginTop = '4px';
+         aiTools.style.fontSize = '11px';
+         aiTools.style.userSelect = 'none';
+         aiTools.style.webkitUserSelect = 'none';
+         
+         var copyAiBtn = document.createElement('button');
+         copyAiBtn.textContent = 'Copy';
+         copyAiBtn.className = 'ai-header-btn';
+         copyAiBtn.style.padding = '2px 6px';
+         copyAiBtn.onclick = () => navigator.clipboard.writeText(aiMsg.innerText);
+         
+         aiTools.appendChild(copyAiBtn);
+         aiWrapper.appendChild(toolPillsContainer);
+         aiWrapper.appendChild(aiMsg);
+         aiWrapper.appendChild(aiTools);
+         msgs.appendChild(aiWrapper);
+        msgs.scrollTop = msgs.scrollHeight;
+        input.value = '';
+
+        // Handle simple open/load/switch requests locally so they cannot be
+        // hallucinated or trapped in an AI tool-discovery loop.
+        const directOpen = prompt.match(/^(?:please\s+)?(?:open|load|switch\s+to)\s+(?:the\s+)?(.+?)(?:\s+project)?[.!]?$/i);
+        if (directOpen) {
+          setAiStatus('Opening project…');
+          try {
+            const result = await openProjectInEditor(directOpen[1].trim());
+            const finalAnswer = 'Opened the project in the editor and updated the active workspace.\n\nPath: `' + result.projectPath + '`';
+            currentSessionMessages.push({ role: 'assistant', content: finalAnswer });
+            aiMsg.innerHTML = formatMarkdown(finalAnswer);
+            saveHistory(prompt, formatMarkdown(finalAnswer));
+          } catch (error) {
+            const message = error && error.message ? error.message : String(error);
+            aiMsg.innerHTML = '<span style="color: var(--ai-danger); font-weight: bold;">Project open failed:</span> ' + formatMarkdown(message);
+          } finally {
+            isSending = false;
+            sendButton.disabled = false;
+            sendButton.style.opacity = '1';
+            setAiStatus('', false);
+          }
+          msgs.scrollTop = msgs.scrollHeight;
+          return;
+        }
+        
+        let sysPrompt = `You are AgenticPLC Copilot — an expert autonomous AI embedded inside the AgenticPLC IDE. You are a PLC programming expert who knows the IEC 61131-3 standard deeply.
+
+Your job is to translate plain-English requests into working PLC programs by calling tools. You can create projects, write Structured Text code, build Ladder Logic diagrams, add variables, compile, and simulate — all by calling the right tools in sequence.
+
+## CRITICAL RULES FOR TOOL CALLING:
+1. Call tools ONE AT A TIME. Never call multiple tools in a single response. Wait for each result before calling the next.
+2. ALWAYS call addVariables BEFORE writeSTCode or buildLadderLogic that uses those variables.
+3. After writing code, call compileProject to verify it compiles correctly.
+4. If compilation fails, read the errors, fix the code, and try again.
+5. Call getProjectSummary or readCurrentPou FIRST if you need to understand the current project state.
+6. When asked what is currently open, use getWorkspaceContext and trust only its returned state.
+
+## WORKFLOW FOR COMMON REQUESTS:
+
+### "Create a [X] program" (e.g., motor starter, traffic light, tank level controller):
+1. Call createPLCProject with name and path C:/AgenticPLC_Projects
+2. Call addVariables with ALL needed variables (inputs, outputs, locals)
+3. Call writeSTCode with the complete ST program body
+4. Call compileProject to verify
+5. Report the result to the user
+
+### "Add variables" or "Add inputs/outputs":
+1. Call addVariables with the variable definitions
+
+### "Write code for [X]" or "Program [X] in Structured Text":
+1. Call readCurrentPou to see existing variables
+2. Call addVariables if new variables are needed
+3. Call writeSTCode with the complete ST code body
+4. Call compileProject to verify
+
+### "Build ladder logic for [X]":
+1. Call addVariables with all needed variables first
+2. Call buildLadderLogic with the nodes array
+
+### "Compile" or "Check for errors":
+1. Call compileProject
+
+### "Simulate" or "Run the program":
+1. Call simulateProject
+
+## IEC 61131-3 STRUCTURED TEXT REFERENCE:
+- Variable types: BOOL, INT, DINT, REAL, TIME, STRING, WORD, BYTE, UINT, UDINT
+- Variable classes: input (sensors/buttons), output (actuators/motors), local (internal state)
+- Operators: AND, OR, NOT, XOR, :=, =, <>, <, >, <=, >=, +, -, *, /
+- Control: IF/THEN/ELSIF/ELSE/END_IF, CASE/OF/END_CASE, FOR/TO/BY/DO/END_FOR, WHILE/DO/END_WHILE, REPEAT/UNTIL/END_REPEAT
+- Timers: TON (on-delay), TOF (off-delay), TP (pulse). Usage: Timer_Name(IN := condition, PT := T#5s); result := Timer_Name.Q;
+- Counters: CTU (up), CTD (down), CTUD (up/down)
+- IMPORTANT: In writeSTCode, write ONLY the executable body. Do NOT include PROGRAM/END_PROGRAM or VAR/END_VAR blocks.
+
+## GENERAL BEHAVIOR:
+- For project creation, default to path C:/AgenticPLC_Projects and language st unless specified otherwise.
+- For opening projects, use the openProject tool.
+- Do NOT ask unnecessary questions. Infer sensible defaults.
+- Be concise in responses. Show what you did and the result.
+- If the user asks for a Ladder Logic Diagram visualization, draw it using ASCII art: |---[ Switch ]---[ Switch2 ]---( Motor )---|`;
+        
+        // Make sure system prompt is always the first message
+        if (currentSessionMessages.length === 0 || currentSessionMessages[0].role !== 'system') {
+          const fallbackInstructions = "\n\n## AVAILABLE TOOLS:\n" + JSON.stringify(aiTools, null, 2) + "\n\nIf your API provider does not support native tool calling, you MUST output a raw JSON block in this exact format to use a tool: {\"tool\": \"toolName\", \"arguments\": {\"argName\": \"value\"}}. DO NOT ask for permission, just output the JSON block to execute the tool.";
+          currentSessionMessages.unshift({ role: 'system', content: sysPrompt + fallbackInstructions });
+        }
+        
+        if (pendingAttachments.length > 0) {
+          const contentArray = [];
+          if (prompt) contentArray.push({ type: 'text', text: prompt });
+          pendingAttachments.forEach(att => {
+            if (att.type === 'text') {
+              contentArray.push({ type: 'text', text: "\n--- Attached File: " + att.name + " ---\n" + att.data + "\n" });
+            } else if (att.type === 'image') {
+              contentArray.push({ type: 'image_url', image_url: { url: att.data } });
+            }
+          });
+          currentSessionMessages.push({ role: 'user', content: contentArray });
+          pendingAttachments = [];
+          renderAttachments();
+        } else {
+          currentSessionMessages.push({ role: 'user', content: prompt });
+        }
+        
+        const providerCandidates = [apiSettings, ...(Array.isArray(apiSettings.fallbacks) ? apiSettings.fallbacks : [])]
+          .filter(provider => provider && provider.url && provider.model)
+          .slice(0, 5);
+
+        async function processAgentLoop(iteration = 0, providerIndex = 0) {
+          if (isAIStopped) return 'Stopped by user.';
+          if (iteration >= 15) return 'I stopped safely after several workspace actions. Please check the current project state and tell me what you want to do next.';
+          const activeProvider = providerCandidates[Math.min(providerIndex, providerCandidates.length - 1)];
+          if (!activeProvider) throw new Error('No AI provider is configured. Open SETTINGS and add a provider and API key, or start a local Ollama server.');
+          setAiStatus(providerIndex === 0 ? (iteration === 0 ? 'Thinking…' : 'Working with the editor…') : 'Switching to AI fallback ' + (providerIndex + 1) + '…');
+          const headers = { 'Content-Type': 'application/json' };
+          if (activeProvider.key) {
+            headers['Authorization'] = 'Bearer ' + activeProvider.key;
+          }
+          
+          // Clean messages for strict providers (like Gemini) that reject any unknown properties
+          const cleanMessages = currentSessionMessages.map(msg => {
+            let cleanMsg = { role: msg.role };
+            if (msg.content !== undefined) cleanMsg.content = msg.content;
+            if (msg.name !== undefined) cleanMsg.name = msg.name;
+            if (msg.tool_calls !== undefined) cleanMsg.tool_calls = msg.tool_calls;
+            if (msg.tool_call_id !== undefined) cleanMsg.tool_call_id = msg.tool_call_id;
+            return cleanMsg;
+          });
+          
+          let bodyPayload = {
+            model: activeProvider.model,
+            messages: cleanMessages
+          };
+          
+          // Send the workspace tools for every provider. If a local/older provider
+          // rejects tool calling, the request below retries as ordinary chat.
+          bodyPayload.tools = aiTools;
+          
+           if (!activeProvider.url || !activeProvider.model) throw new Error('AI settings are incomplete. Open SETTINGS and provide an API URL and model.');
+           const controller = new AbortController();
+           currentAbortController = controller;
+           const timeoutId = setTimeout(() => controller.abort(), 60000);
+           let response;
+           let usedTools = !!bodyPayload.tools;
+           try {
+             response = await fetch(activeProvider.url, {
+             method: 'POST',
+             headers: headers,
+             body: JSON.stringify(bodyPayload),
+             signal: controller.signal
+             });
+           } catch (error) {
+             if (providerIndex + 1 < providerCandidates.length) return await processAgentLoop(iteration, providerIndex + 1);
+             if (error && error.name === 'AbortError') throw new Error('The AI request timed out after 60 seconds. Check the API URL or try again.');
+             throw new Error('Unable to reach the AI service. Check your network, API URL, or local server.');
+           } finally {
+             clearTimeout(timeoutId);
+           }
+           
+           let responseText = await response.text();
+           let data;
+           try { data = responseText ? JSON.parse(responseText) : {}; }
+           catch (error) { throw new Error('The AI service returned an invalid response.'); }
+          if (response.status === 429) {
+            if (providerIndex + 1 < providerCandidates.length) return await processAgentLoop(iteration, providerIndex + 1);
+            const retryAfter = response.headers.get('retry-after');
+            const waitHint = retryAfter ? ' Retry after ' + retryAfter + ' seconds.' : ' Wait briefly or use a provider/key with available quota.';
+            const detail = data.error && data.error.message ? data.error.message
+              : (typeof data.error === 'string' ? data.error : (data.message || data.status || ''));
+            const rawDetail = detail || responseText.slice(0, 400).replace(/\s+/g, ' ').trim();
+            const providerHost = (() => { try { return new URL(activeProvider.url).host; } catch (e) { return activeProvider.url; } })();
+            throw new Error('AI provider ' + providerHost + ' returned HTTP 429.' + (rawDetail ? ' Provider message: ' + rawDetail : '') + waitHint);
+          }
+          // Some OpenAI-compatible providers do not implement tool calling.
+          // Retry once without tools so ordinary chat still works smoothly.
+          const providerError = data.error && (data.error.message || JSON.stringify(data.error));
+          const providerErrorText = providerError || data.detail || data.message || '';
+          if (usedTools && !response.ok && /tool|function|unsupported|parameter/i.test(String(providerErrorText))) {
+            delete bodyPayload.tools;
+            usedTools = false;
+            const retryController = new AbortController();
+            const retryTimeoutId = setTimeout(() => retryController.abort(), 60000);
+            try {
+              response = await fetch(activeProvider.url, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(bodyPayload),
+                signal: retryController.signal
+              });
+            } catch (error) {
+              if (error && error.name === 'AbortError') throw new Error('The AI request timed out after 60 seconds. Check the API URL or try again.');
+              throw new Error('Unable to reach the AI service. Check your network, API URL, or local server.');
+            } finally {
+              clearTimeout(retryTimeoutId);
+            }
+            responseText = await response.text();
+            try { data = responseText ? JSON.parse(responseText) : {}; }
+            catch (error) { throw new Error('The AI service returned an invalid response.'); }
+          }
+          if (!response.ok || data.error || data.detail) {
+            if ((response.status === 401 || response.status === 403 || response.status >= 500) && providerIndex + 1 < providerCandidates.length) {
+              return await processAgentLoop(iteration, providerIndex + 1);
+            }
+            let errMsg = 'The AI service returned HTTP ' + response.status + '.';
+            if (data.error && data.error.message) errMsg += '\n\n' + data.error.message;
+            else if (typeof data.error === 'string') errMsg += '\n\n' + data.error;
+            else if (data.error) errMsg += '\n\n' + JSON.stringify(data.error);
+            else if (data.detail) errMsg += '\n\n' + (typeof data.detail === 'string' ? data.detail : JSON.stringify(data.detail));
+            else if (data.message) errMsg += '\n\n' + (typeof data.message === 'string' ? data.message : JSON.stringify(data.message));
+            errMsg += '\n\nRaw API Response:\n' + (responseText || '<empty response body>');
+            throw new Error(errMsg);
+          }
+          
+          if (!data.choices || !data.choices[0]) throw new Error('No response from API');
+          
+          const msg = data.choices[0].message;
+          // Fallback parser for LLMs that output raw tool calls as text instead of using native tool arrays
+          if (!msg.tool_calls && msg.content) {
+            msg.tool_calls = [];
+            let tempContent = msg.content;
+            
+            // === 1. XML-style tool calls (Anthropic/Claude format) ===
+            // Strip <server_name> tags first
+            tempContent = tempContent.replace(/<server_name>[\s\S]*?<\/server_name>/gi, '');
+            
+            // 1a. Wrapped: <tool_use>...<tool_name>...<arguments>...</tool_use>
+            const xmlRegex = /<(?:tool_use|tool_call|function_call)>([\s\S]*?)<\/(?:tool_use|tool_call|function_call)>/gi;
+            let xmlMatch;
+            while ((xmlMatch = xmlRegex.exec(tempContent)) !== null) {
+              const block = xmlMatch[1];
+              const nameMatch = block.match(/<(?:tool_name|name)>(.*?)<\/(?:tool_name|name)>/);
+              const argsMatch = block.match(/<(?:arguments|parameters)>([\s\S]*?)<\/(?:arguments|parameters)>/);
+              if (nameMatch) {
+                let argsObj = {};
+                if (argsMatch) {
+                  try { argsObj = JSON.parse(argsMatch[1].trim()); } catch(e) {
+                    const kvRegex = /"(\w+)"\s*:\s*"([^"]*)"/g;
+                    let kv;
+                    while ((kv = kvRegex.exec(argsMatch[1])) !== null) argsObj[kv[1]] = kv[2];
+                  }
+                }
+                msg.tool_calls.push({
+                  id: 'call_' + Date.now() + Math.random().toString(36).substr(2, 5),
+                  type: 'function',
+                  function: { name: nameMatch[1].trim(), arguments: JSON.stringify(argsObj) }
+                });
+                tempContent = tempContent.replace(xmlMatch[0], '');
+              }
+            }
+            
+            // 1b. Standalone (no wrapper): <tool_name>X</tool_name>\n<arguments>...</arguments>
+            if (msg.tool_calls.length === 0) {
+              const standaloneRegex = /<(?:tool_name|name)>(.*?)<\/(?:tool_name|name)>[\s\S]*?<(?:arguments|parameters)>([\s\S]*?)<\/(?:arguments|parameters)>/gi;
+              let saMatch;
+              while ((saMatch = standaloneRegex.exec(tempContent)) !== null) {
+                let argsObj = {};
+                try { argsObj = JSON.parse(saMatch[2].trim()); } catch(e) {
+                  const kvRegex = /"(\w+)"\s*:\s*"([^"]*)"/g;
+                  let kv;
+                  while ((kv = kvRegex.exec(saMatch[2])) !== null) argsObj[kv[1]] = kv[2];
+                }
+                msg.tool_calls.push({
+                  id: 'call_' + Date.now() + Math.random().toString(36).substr(2, 5),
+                  type: 'function',
+                  function: { name: saMatch[1].trim(), arguments: JSON.stringify(argsObj) }
+                });
+                tempContent = tempContent.replace(saMatch[0], '');
+              }
+            }
+            
+            // === 2. Markdown JSON code blocks ===
+            if (msg.tool_calls.length === 0) {
+              const mdRegex = /```(?:json)?\s*([\s\S]*?)\s*```/gi;
+              let match;
+              while ((match = mdRegex.exec(msg.content)) !== null) {
+                try {
+                  const parsed = JSON.parse(match[1].trim());
+                  if (parsed && parsed.tool && parsed.arguments) {
+                    msg.tool_calls.push({
+                      id: 'call_' + Date.now() + Math.random().toString(36).substr(2, 5),
+                      type: 'function',
+                      function: { name: parsed.tool, arguments: typeof parsed.arguments === 'string' ? parsed.arguments : JSON.stringify(parsed.arguments) }
+                    });
+                    tempContent = tempContent.replace(match[0], '');
+                  }
+                } catch(e) {}
+              }
+            }
+            
+            // === 3. Inline JSON on a single line ===
+            if (msg.tool_calls.length === 0) {
+              const lines = tempContent.split('\n');
+              for (let line of lines) {
+                const trimmed = line.trim();
+                if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+                  try {
+                    const parsed = JSON.parse(trimmed);
+                    if (parsed && parsed.tool) {
+                      msg.tool_calls.push({
+                        id: 'call_' + Date.now() + Math.random().toString(36).substr(2, 5),
+                        type: 'function',
+                        function: { name: parsed.tool, arguments: typeof parsed.arguments === 'string' ? parsed.arguments : JSON.stringify(parsed.arguments || {}) }
+                      });
+                      tempContent = tempContent.replace(trimmed, '');
+                    }
+                  } catch(e) {}
+                }
+              }
+            }
+            
+            msg.content = tempContent.trim();
+            if (msg.tool_calls.length === 0) delete msg.tool_calls;
+          }
+          
+          if (msg.tool_calls && msg.tool_calls.length > 0) {
+            msg.tool_calls.forEach(tc => tc.type = tc.type || 'function');
+            currentSessionMessages.push(msg);
+            
+            // === AgenticCore tool names that modify editor state ===
+            const stateMutatingTools = ['writeSTCode', 'clearSTCode', 'addVariables', 'clearVariables', 'buildLadderLogic', 'insertContact', 'insertCoil', 'createPLCProject', 'openProject', 'createPou', 'deletePou', 'renamePou'];
+            
+            for (let tc of msg.tool_calls) {
+              let resultObj = {};
+              const toolName = tc.function.name;
+              const pill = document.createElement('div');
+              pill.style.fontSize = '12px';
+              pill.style.color = 'var(--ai-accent)';
+              pill.style.padding = '2px 6px';
+              pill.style.background = 'var(--ai-border)';
+              pill.style.borderRadius = '4px';
+              pill.style.display = 'inline-block';
+              pill.style.alignSelf = 'flex-start';
+              pill.innerHTML = '&#128296; Agentic Core (' + toolName + ')';
+              toolPillsContainer.appendChild(pill);
+              let dynamicStatus = 'Working...';
+              if (['getProjectSummary', 'readCurrentPou', 'getWorkspaceContext'].includes(toolName)) dynamicStatus = 'Reading workspace...';
+              else if (['writeSTCode', 'clearSTCode'].includes(toolName)) dynamicStatus = 'Modifying ST code...';
+              else if (['addVariables', 'clearVariables'].includes(toolName)) dynamicStatus = 'Updating variables...';
+              else if (toolName === 'buildLadderLogic') dynamicStatus = 'Building ladder logic...';
+              else if (toolName === 'compileProject') dynamicStatus = 'Compiling project...';
+              else if (['simulateProject', 'stopSimulation'].includes(toolName)) dynamicStatus = 'Managing simulation...';
+              else if (['createPou', 'deletePou', 'renamePou'].includes(toolName)) dynamicStatus = 'Managing POUs...';
+              else dynamicStatus = 'Executing ' + toolName + '...';
+              
+              if (msg.content) {
+                aiMsg.innerHTML = formatMarkdown(msg.content) + '<br/><br/><span style="opacity:0.7; font-size:11px;">' + dynamicStatus + '</span>';
+              } else {
+                aiMsg.textContent = dynamicStatus;
+              }
+              try {
+                const args = tc.function.arguments ? (typeof tc.function.arguments === 'string' ? JSON.parse(tc.function.arguments) : tc.function.arguments) : {};
+                
+                const requiresPermission = stateMutatingTools.includes(toolName) || ['compileProject', 'simulateProject', 'stopSimulation'].includes(toolName);
+                if (requiresPermission) {
+                  const detail = toolName === 'writeSTCode' ? (args.pouName || 'main') + '\n\n' + String(args.code || '').slice(0, 1200)
+                    : toolName === 'addVariables' ? (args.pouName || 'main') + '\n' + JSON.stringify(args.variables || args)
+                    : toolName === 'buildLadderLogic' ? (args.pouName || 'main') + '\n' + JSON.stringify(args.nodes || [])
+                    : JSON.stringify(args);
+                  if (!(await requestWorkspacePermission('AI action: ' + toolName, detail))) {
+                    resultObj = { success: false, permissionDenied: true, error: 'The user denied permission for ' + toolName + '.' };
+                  }
+                }
+                // === AgenticCore Tools (direct editor manipulation) ===
+                if (resultObj.permissionDenied) {
+                  // Permission was denied; do not execute the tool.
+                } else if (['getProjectSummary', 'readCurrentPou', 'addVariables', 'clearVariables', 'writeSTCode', 'clearSTCode', 'buildLadderLogic', 'compileProject', 'simulateProject', 'stopSimulation', 'createPou', 'deletePou', 'renamePou'].includes(toolName)) {
+                  if (!window.AgenticCore || !window.AgenticCore.EditorController) {
+                    resultObj = { success: false, error: 'AgenticCore not loaded. The editor may not be fully initialized yet.' };
+                  } else {
+                    const controller = window.AgenticCore.EditorController;
+                    if (typeof controller[toolName] !== 'function') {
+                      resultObj = { success: false, error: 'Tool method not found: ' + toolName };
+                    } else {
+                      const result = await controller[toolName](args);
+                      resultObj = (typeof result === 'string') ? { success: true, data: result } : (result || { success: true });
+                    }
+                  }
+                }
+                // === Workspace / Project Tools ===
+                else if (toolName === 'listAppCommands') {
+                  if(window.bridge) {
+                    resultObj = Object.keys(window.bridge).filter(k => typeof window.bridge[k] === 'function');
+                  } else {
+                    resultObj = { success: false, error: 'Bridge unavailable' };
+                  }
+                } else if (toolName === 'getWorkspaceContext') {
+                  // __ROOT_STORE__ IS the state directly
+                  const state = window.__ROOT_STORE__ || null;
+                  if (!state) {
+                    resultObj = { success: false, error: 'The editor store is not ready.' };
+                  } else {
+                    resultObj = {
+                      success: true,
+                      project: state.project?.meta || state.project || null,
+                      editor: state.editor?.meta || state.editor || null,
+                      editingState: state.workspace?.editingState || null,
+                      canEdit: state.workspace?.canEdit !== false,
+                      openFile: state.workspace?.selectedProjectTreeLeaf || null
+                    };
+                  }
+                } else if (toolName === 'openProject') {
+                  try {
+                    resultObj = await openProjectInEditor(args.project);
+                  } catch (e) {
+                    resultObj = { success: false, error: e.message };
+                  }
+                } else if (toolName === 'createPLCProject') {
+                  const createResult = normalizeAgentProjectResponse(await window.bridge.agentCreateProject(args));
+                  if (createResult && createResult.success && createResult.data && window.__ROOT_STORE__) {
+                    // __ROOT_STORE__ IS the state directly
+                    const state = window.__ROOT_STORE__;
+                    if (state.sharedWorkspaceActions && typeof state.sharedWorkspaceActions.handleOpenProjectResponse === 'function') {
+                      state.sharedWorkspaceActions.handleOpenProjectResponse(createResult.data);
+                      resultObj = { success: true, editorUpdated: true, projectPath: createResult.data.meta?.path || args.path };
+                    } else {
+                      resultObj = { success: false, error: 'The editor store is not ready to accept the new project.' };
+                    }
+                  } else {
+                    resultObj = createResult || { success: false, error: 'The project-create service returned no result.' };
+                  }
+                } else if (toolName === 'readWorkspaceFile') {
+                  resultObj = await window.bridge.agentReadWorkspaceFile(args.path);
+                } else if (toolName === 'listWorkspaceFiles') {
+                  resultObj = await window.bridge.agentListWorkspaceFiles(args.path || '');
+                } else if (toolName === 'searchWorkspace') {
+                  resultObj = await window.bridge.agentSearchWorkspace(args.query);
+                } else if (toolName === 'writeWorkspaceFile') {
+                  const preview = String(args.content ?? '').slice(0, 1200);
+                  if (!(await requestWorkspacePermission('Write workspace file', args.path + '\n\nPreview:\n' + preview + (String(args.content ?? '').length > 1200 ? '\n…' : '')))) {
+                    resultObj = { success: false, permissionDenied: true, error: 'The user denied permission to write this file.' };
+                  } else {
+                    resultObj = await window.bridge.agentWriteWorkspaceFile(args.path, args.content);
+                    if (resultObj && resultObj.success) {
+                      const verified = await window.bridge.agentReadWorkspaceFile(args.path);
+                      resultObj.verified = verified === String(args.content ?? '');
+                      if (!resultObj.verified) resultObj.error = 'The file was written but verification did not match.';
+                    }
+                  }
+                } else if (toolName === 'deleteWorkspacePath') {
+                  // ONLY deletion requires explicit permission
+                  if (!(await requestWorkspacePermission('DELETE file/folder', args.path + '\n\nThis action cannot be undone!'))) {
+                    resultObj = { success: false, permissionDenied: true, error: 'The user denied permission to delete this path.' };
+                  } else {
+                    resultObj = await window.bridge.agentDeleteWorkspacePath(args.path, true);
+                  }
+
+                } else {
+                  resultObj = { success: false, error: 'Unknown tool: ' + toolName };
+                }
+              } catch(e) {
+                resultObj = { success: false, error: e.message };
+              }
+              currentSessionMessages.push({ role: 'tool', tool_call_id: tc.id, name: toolName, content: JSON.stringify(resultObj) });
+              
+              // === DYNAMIC TOOL RESULT DISPLAY IN CHAT ===
+              const resultBubble = document.createElement('div');
+              resultBubble.style.fontSize = '12px';
+              resultBubble.style.padding = '8px 10px';
+              resultBubble.style.marginTop = '6px';
+              resultBubble.style.borderRadius = '4px';
+              resultBubble.style.background = 'var(--ai-user-bubble, #2d2d2d)';
+              resultBubble.style.maxHeight = '200px';
+              resultBubble.style.overflowY = 'auto';
+              resultBubble.style.whiteSpace = 'pre-wrap';
+              resultBubble.style.wordBreak = 'break-word';
+              
+              if (resultObj.error && !resultObj.success) {
+                resultBubble.style.borderLeft = '3px solid var(--ai-danger, #ef4444)';
+                resultBubble.textContent = '❌ ' + toolName + ': ' + resultObj.error;
+              } else if (['readCurrentPou', 'getProjectSummary', 'getWorkspaceContext', 'listAppCommands'].includes(toolName)) {
+                resultBubble.style.borderLeft = '3px solid var(--ai-accent, #38bdf8)';
+                const dataStr = typeof resultObj === 'string' ? resultObj : JSON.stringify(resultObj.data || resultObj, null, 2);
+                resultBubble.textContent = '📄 ' + toolName + ' result:\n' + (dataStr.length > 1500 ? dataStr.slice(0, 1500) + '\n…truncated' : dataStr);
+              } else {
+                resultBubble.style.borderLeft = '3px solid #22c55e';
+                resultBubble.textContent = '✅ ' + toolName + ': ' + (resultObj.success !== false ? 'Success' : 'Failed') + (resultObj.editorUpdated ? ' (editor updated)' : '');
+              }
+              
+              toolPillsContainer.appendChild(resultBubble);
+              msgs.scrollTop = msgs.scrollHeight;
+              
+              // === CONCURRENCY FIX: Wait for React state to settle after state-mutating tools ===
+              if (stateMutatingTools.includes(toolName)) {
+                await new Promise(r => setTimeout(r, 400));
+              }
+            }
+             return await processAgentLoop(iteration + 1, providerIndex);
+          } else {
+            return msg.content || "";
+          }
+        }
+        
+        try {
+          const finalAnswer = await processAgentLoop();
+          currentSessionMessages.push({ role: 'assistant', content: finalAnswer });
+          const cleanAnswer = finalAnswer.replace(/<(?:minimax:)?tool_call>[\s\S]*/gi, '').replace(/\]<\]minimax\[>\[[\s\S]*/gi, '').trim();
+          
+          // If the final answer is empty, show a summary of tool actions instead of a blank bubble
+          let displayText = cleanAnswer;
+          if (!displayText) {
+            const toolPills = toolPillsContainer.querySelectorAll('div');
+            if (toolPills.length > 0) {
+              displayText = 'Done! Executed ' + toolPills.length + ' action(s) successfully.';
+            } else {
+              displayText = 'Done!';
+            }
+          }
+          
+          const fmt = formatMarkdown(displayText);
+          aiMsg.innerHTML = fmt;
+          saveHistory(prompt, fmt);
+        } catch(err) {
+           // Pop the last user message if the request failed completely so they can retry
+           if (currentSessionMessages.length > 0 && currentSessionMessages[currentSessionMessages.length - 1].role === 'user') {
+             currentSessionMessages.pop();
+           }
+           aiMsg.innerHTML = '<span style="color: var(--ai-danger); font-weight: bold;">AI Error:</span> ' + formatMarkdown(String(err && err.message ? err.message : err));
+         } finally {
+           isSending = false;
+           sendButton.disabled = false;
+           sendButton.style.opacity = '1';
+           document.getElementById('ai-stop-btn').style.display = 'none';
+           setAiStatus('', false);
+         }
+        msgs.scrollTop = msgs.scrollHeight;
+      }
+    });
+    
+    document.getElementById('ai-chat-input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') document.getElementById('ai-chat-btn').click();
+    });
+    
+    // Sidebar resizing and toggle
+    var resizer = document.getElementById('ai-resizer');
+    var openBtn = document.getElementById('ai-open-btn');
+    var sidebar = document.getElementById('ai-sidebar');
+    var closeBtn = document.getElementById('ai-close-btn');
+    openBtn.style.display = 'none';
+    
+    closeBtn.addEventListener('click', function() {
+      sidebar.style.display = 'none';
+      resizer.style.display = 'none';
+      openBtn.style.display = 'flex';
+    });
+    openBtn.addEventListener('click', function() {
+      sidebar.style.display = 'flex';
+      resizer.style.display = 'block';
+      openBtn.style.display = 'none';
+    });
+    
+    var isResizing = false;
+    resizer.addEventListener('mousedown', function(e) {
+      isResizing = true;
+      document.body.style.cursor = 'col-resize';
+      resizer.style.background = 'var(--ai-primary)';
+      e.preventDefault();
+    });
+    resizer.addEventListener('mouseenter', function() { if(!isResizing) resizer.style.background = 'var(--ai-primary)'; });
+    resizer.addEventListener('mouseleave', function() { if(!isResizing) resizer.style.background = '#252526'; });
+    window.addEventListener('mousemove', function(e) {
+      if (!isResizing) return;
+      var newWidth = document.body.clientWidth - e.clientX;
+      if (newWidth > 200 && newWidth < 800) sidebar.style.width = newWidth + 'px';
+    });
+    window.addEventListener('mouseup', function() {
+      if (isResizing) {
+        isResizing = false;
+        document.body.style.cursor = 'default';
+        resizer.style.background = '#252526';
+      }
+    });
+  </script>
+</body>
+</html>

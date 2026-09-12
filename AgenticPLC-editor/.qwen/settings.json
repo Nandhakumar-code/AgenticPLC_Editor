@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python *)",
+      "Bash(tasklist)",
+      "Bash(findstr *)",
+      "Skill(computer-use)",
+      "Bash(npx *)",
+      "Bash(node_modules\\.bin\\asar *)",
+      "Bash(type *)",
+      "Bash(node_modules\\.bin\\7za.exe *)",
+      "Bash(taskkill *)"
+    ]
+  },
+  "$version": 4
+}

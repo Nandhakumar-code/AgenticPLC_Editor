@@ -1,0 +1,1357 @@
+<html><head><style>body{font-family: Arial, sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 0 20px;} h2 {color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 40px;} h3 {color: #34495e; margin-top: 20px;} p {margin-bottom: 15px;} hr {border: 0; height: 1px; background: #eee; margin: 20px 0;} ul {margin-bottom: 20px;} li {margin-bottom: 5px;}</style></head><body><h1>AgenticPLC Engineering Project Diary</h1>
+<p><strong>Institution:</strong> PSG College of Technology\
+<strong>Department:</strong> Electrical and Electronics Engineering\
+<strong>Project:</strong> Design and Implementation of AgenticPLC with Custom Hardware Configuration\
+<strong>Duration:</strong> 1 July 2026 – 27 July 2026</p>
+<hr />
+<div style='page-break-after: always;'></div>
+
+<h2>DAY 1</h2>
+<p><strong>Date:</strong> 1 July 2026<br />
+<strong>Working Hours:</strong> 7.0 hours<br />
+<strong>Objective:</strong> Project scoping and literature survey on industrial PLC development environments.  </p>
+<hr />
+<h3>Background</h3>
+<p>To build AgenticPLC, a foundational understanding of current IDEs and their limitations is required to identify areas where AI and modern software architecture can improve the development lifecycle.</p>
+<hr />
+<h3>Research Activities</h3>
+<p>Reviewed OpenPLC documentation, the IEC 61131-3 standard overview, and 'Programmable Logic Controllers' by W. Bolton. Explored GitHub repositories for OpenPLC and Beremiz.</p>
+<hr />
+<h3>Concepts Learned</h3>
+<ol>
+<li>PLC Scan Cycle: The continuous process of reading inputs, executing logic, and writing outputs.</li>
+<li>IEC 61131-3: The international standard for programmable logic controllers, focusing on Ladder Diagram (LD) and Structured Text (ST).</li>
+</ol>
+<hr />
+<h3>Engineering Analysis</h3>
+<p>Conventional IDEs are functional but structurally rigid and lack modern AI integration capabilities. Decided to adapt a modular architecture while completely revamping the user interface.</p>
+<hr />
+<h3>Implementation Work</h3>
+<p>Set up the foundational Git repository. Drafted initial architecture document detailing the separation of IDE frontend, AI backend, and hardware abstraction layer.</p>
+<hr />
+<h3>Testing</h3>
+<p>Cloned the existing OpenPLC repository and tested local compilation to verify the toolchain.</p>
+<hr />
+<h3>Problems Encountered</h3>
+<p>Initial build of legacy OpenPLC editor failed due to missing Python dependencies.</p>
+<hr />
+<h3>Solutions Applied</h3>
+<p>Isolated the dependencies into a virtual environment and patched build scripts to point to localized binaries.</p>
+<hr />
+<h3>Deliverables</h3>
+<p>Project architecture draft, initialized Git repository, functioning local build of base OpenPLC.</p>
+<hr />
+<h3>Knowledge Gained</h3>
+<p>Gained deep understanding of the legacy build process for industrial IDEs and the exact directory structure of the Beremiz/OpenPLC codebase.</p>
+<hr />
+<h3>Next Day Plan</h3>
+<p>Analyze the Electron architecture and evaluate Monaco editor for Structured Text.</p>
+<hr />
+<h3>Time Distribution</h3>
+<ul>
+<li><strong>Research:</strong> 4.0 hours</li>
+<li><strong>Implementation:</strong> 2.0 hours</li>
+<li><strong>Testing:</strong> 0.5 hours</li>
+<li><strong>Documentation:</strong> 0.5 hours</li>
+</ul>
+<div style='page-break-after: always;'></div>
+
+<h2>DAY 2</h2>
+<p><strong>Date:</strong> 2 July 2026<br />
+<strong>Working Hours:</strong> 6.5 hours<br />
+<strong>Objective:</strong> Study of OpenPLC internal architecture and UI framework selection.  </p>
+<hr />
+<h3>Background</h3>
+<p>Before building the new AgenticPLC IDE, the underlying mechanisms of project serialization and UI rendering must be understood.</p>
+<hr />
+<h3>Research Activities</h3>
+<p>Studied the internal architecture of OpenPLC Editor to understand editor-rendering workflow and project serialization. Researched Electron.js and Next.js as potential UI frameworks.</p>
+<hr />
+<h3>Concepts Learned</h3>
+<ol>
+<li>Electron Architecture: Main process for OS-level operations and Renderer process for the UI.</li>
+<li>IPC (Inter-Process Communication): Mechanism for the UI to talk to the file system and compiler.</li>
+</ol>
+<hr />
+<h3>Engineering Analysis</h3>
+<p>Electron provides the necessary desktop integration required for a native IDE feel, while allowing the use of modern React-based UI components. This is vastly superior to the legacy wxPython UI.</p>
+<hr />
+<h3>Implementation Work</h3>
+<p>Created a proof-of-concept Electron app. Configured Webpack to bundle a React frontend.</p>
+<hr />
+<h3>Testing</h3>
+<p>Tested IPC messaging between the React frontend and the Electron main process.</p>
+<hr />
+<h3>Problems Encountered</h3>
+<p>React fast-refresh was causing IPC event listeners to multiply on hot-reload.</p>
+<hr />
+<h3>Solutions Applied</h3>
+<p>Implemented a cleanup routine in the React <code>useEffect</code> hook to remove listeners on unmount.</p>
+<hr />
+<h3>Deliverables</h3>
+<p>Basic Electron + React boilerplate application.</p>
+<hr />
+<h3>Knowledge Gained</h3>
+<p>Mastered IPC communication patterns in Electron and Webpack configuration for desktop apps.</p>
+<hr />
+<h3>Next Day Plan</h3>
+<p>Integrate Monaco Editor and configure it for Structured Text syntax highlighting.</p>
+<hr />
+<h3>Time Distribution</h3>
+<ul>
+<li><strong>Research:</strong> 2.5 hours</li>
+<li><strong>Implementation:</strong> 3.0 hours</li>
+<li><strong>Testing:</strong> 0.5 hours</li>
+<li><strong>Documentation:</strong> 0.5 hours</li>
+</ul>
+<div style='page-break-after: always;'></div>
+
+<h2>DAY 3</h2>
+<p><strong>Date:</strong> 3 July 2026<br />
+<strong>Working Hours:</strong> 7.0 hours<br />
+<strong>Objective:</strong> Integrate Monaco Editor and establish basic Structured Text (ST) support.  </p>
+<hr />
+<h3>Background</h3>
+<p>A robust code editor is the core of any IDE. Monaco (the engine behind VS Code) provides excellent performance and extensibility.</p>
+<hr />
+<h3>Research Activities</h3>
+<p>Read Microsoft's Monaco Editor documentation regarding custom language definitions and Monarch syntax highlighting.</p>
+<hr />
+<h3>Concepts Learned</h3>
+<ol>
+<li>Monaco Editor: High-performance web-based code editor.</li>
+<li>Monarch: A JSON-based declarative syntax highlighter used by Monaco.</li>
+</ol>
+<hr />
+<h3>Engineering Analysis</h3>
+<p>ST is not supported out-of-the-box by Monaco. Writing a custom Monarch definition is required. This is preferable to using a less performant editor like CodeMirror.</p>
+<hr />
+<h3>Implementation Work</h3>
+<p>Integrated <code>@monaco-editor/react</code>. Wrote a Monarch language definition for IEC 61131-3 Structured Text, including keywords, variable types (BOOL, INT, REAL), and comment styles.</p>
+<hr />
+<h3>Testing</h3>
+<p>Loaded sample ST code into the editor to verify syntax highlighting and performance.</p>
+<hr />
+<h3>Problems Encountered</h3>
+<p>Regex for floating-point numbers in ST was incorrectly matching integer boundaries.</p>
+<hr />
+<h3>Solutions Applied</h3>
+<p>Refined the Monarch tokenizer regex to properly distinguish between INT and REAL literals based on the presence of a decimal point.</p>
+<hr />
+<h3>Deliverables</h3>
+<p>Functioning code editor component with custom ST syntax highlighting.</p>
+<hr />
+<h3>Knowledge Gained</h3>
+<p>Learned how to construct custom language tokenizers using the Monarch declarative syntax.</p>
+<hr />
+<h3>Next Day Plan</h3>
+<p>Research AI integration strategies for code generation and the Agent workflow.</p>
+<hr />
+<h3>Time Distribution</h3>
+<ul>
+<li><strong>Research:</strong> 2.0 hours</li>
+<li><strong>Implementation:</strong> 4.0 hours</li>
+<li><strong>Testing:</strong> 0.5 hours</li>
+<li><strong>Documentation:</strong> 0.5 hours</li>
+</ul>
+<div style='page-break-after: always;'></div>
+
+<h2>DAY 4</h2>
+<p><strong>Date:</strong> 4 July 2026<br />
+<strong>Working Hours:</strong> 7.5 hours<br />
+<strong>Objective:</strong> Design the AI Assistant integration strategy and Agent workflow.  </p>
+<hr />
+<h3>Background</h3>
+<p>The 'Agentic' part of AgenticPLC requires a robust architecture to securely and efficiently communicate with LLMs for logic generation.</p>
+<hr />
+<h3>Research Activities</h3>
+<p>Explored OpenAI and Llama 3.1 API documentation. Researched Agentic workflows (ReAct, Plan-and-Execute) for coding tasks.</p>
+<hr />
+<h3>Concepts Learned</h3>
+<ol>
+<li>AI Agent Workflow: The cycle of Thought, Action, and Observation used by LLMs to solve complex tasks.</li>
+<li>Tool Calling: Providing the LLM with specific functions (e.g., <code>insert_ladder_rung</code>) to modify the IDE state.</li>
+</ol>
+<hr />
+<h3>Engineering Analysis</h3>
+<p>A purely conversational LLM is insufficient. The AI must be an 'Agent' capable of directly invoking IDE APIs. Selected a ReAct-based architecture.</p>
+<hr />
+<h3>Implementation Work</h3>
+<p>Drafted the AI middleware layer in Node.js. Defined the JSON schema for tool execution.</p>
+<hr />
+<h3>Testing</h3>
+<p>Mocked LLM responses to test the middleware's JSON parsing and tool-routing logic.</p>
+<hr />
+<h3>Problems Encountered</h3>
+<p>Initial tests showed the LLM attempting to call multiple tools at once in a single JSON payload, which our mock backend couldn't handle.</p>
+<hr />
+<h3>Solutions Applied</h3>
+<p>Implemented a rudimentary parser to extract the first tool call, ignoring subsequent ones for now. Concurrency will need deeper investigation later.</p>
+<hr />
+<h3>Deliverables</h3>
+<p>AI middleware architecture diagram and working JSON parsing utility.</p>
+<hr />
+<h3>Knowledge Gained</h3>
+<p>Understood the complexities of handling non-deterministic LLM outputs in deterministic software systems.</p>
+<hr />
+<h3>Next Day Plan</h3>
+<p>Implement the UI components for the AI Assistant chat interface.</p>
+<hr />
+<h3>Time Distribution</h3>
+<ul>
+<li><strong>Research:</strong> 3.5 hours</li>
+<li><strong>Implementation:</strong> 2.5 hours</li>
+<li><strong>Testing:</strong> 1.0 hours</li>
+<li><strong>Documentation:</strong> 0.5 hours</li>
+</ul>
+<div style='page-break-after: always;'></div>
+
+<h2>DAY 5</h2>
+<p><strong>Date:</strong> 5 July 2026<br />
+<strong>Working Hours:</strong> 6.5 hours<br />
+<strong>Objective:</strong> Develop the AI Assistant Chat UI and establish UI branding.  </p>
+<hr />
+<h3>Background</h3>
+<p>A sleek, modern interface is required to interact with the AI agent. The legacy OpenPLC branding needs to be replaced.</p>
+<hr />
+<h3>Research Activities</h3>
+<p>Studied modern IDE aesthetics (glassmorphism, dark mode, smooth transitions).</p>
+<hr />
+<h3>Concepts Learned</h3>
+<ol>
+<li>UI State Management: Managing the chat history and loading states in React.</li>
+<li>CSS Modules / Tailwind: Scoped styling for clean UI components.</li>
+</ol>
+<hr />
+<h3>Engineering Analysis</h3>
+<p>Decided to implement a custom dark mode theme to give a premium R&amp;D feel. The chat interface must support markdown rendering for code snippets.</p>
+<hr />
+<h3>Implementation Work</h3>
+<p>Rebranded the application from OpenPLC to AgenticPLC. Updated logos and brand colors. Built the <code>ChatPanel</code> component with user/agent message bubbles and a typing indicator.</p>
+<hr />
+<h3>Testing</h3>
+<p>Tested UI responsiveness and scroll-to-bottom behavior when new messages arrive.</p>
+<hr />
+<h3>Problems Encountered</h3>
+<p>The chat panel would not automatically scroll when tall code blocks were rendered.</p>
+<hr />
+<h3>Solutions Applied</h3>
+<p>Attached a <code>ResizeObserver</code> to the message container to trigger scrolling whenever the DOM height changes.</p>
+<hr />
+<h3>Deliverables</h3>
+<p>Fully branded AgenticPLC UI shell with an interactive chat panel.</p>
+<hr />
+<h3>Knowledge Gained</h3>
+<p>Gained experience in advanced React DOM manipulation and UI UX design principles.</p>
+<hr />
+<h3>Next Day Plan</h3>
+<p>Configure actual Agentic API access and connect the frontend to the backend.</p>
+<hr />
+<h3>Time Distribution</h3>
+<ul>
+<li><strong>Research:</strong> 1.0 hours</li>
+<li><strong>Implementation:</strong> 4.5 hours</li>
+<li><strong>Testing:</strong> 0.5 hours</li>
+<li><strong>Documentation:</strong> 0.5 hours</li>
+</ul>
+<div style='page-break-after: always;'></div>
+
+<h2>DAY 6</h2>
+<p><strong>Date:</strong> 6 July 2026<br />
+<strong>Working Hours:</strong> 7.0 hours<br />
+<strong>Objective:</strong> Configure Agentic API Access and implement live LLM communication.  </p>
+<hr />
+<h3>Background</h3>
+<p>The frontend UI needs to send user prompts to the AI middleware, which then communicates with the LLM API.</p>
+<hr />
+<h3>Research Activities</h3>
+<p>Reviewed streaming API implementations (Server-Sent Events) to reduce perceived latency.</p>
+<hr />
+<h3>Concepts Learned</h3>
+<ol>
+<li>Server-Sent Events (SSE): A unidirectional protocol for streaming updates from server to client.</li>
+<li>API Authentication: Securely managing API keys in the Electron main process.</li>
+</ol>
+<hr />
+<h3>Engineering Analysis</h3>
+<p>Standard HTTP requests feel too slow for LLM generation. Streaming the response token-by-token is essential for a modern IDE experience.</p>
+<hr />
+<h3>Implementation Work</h3>
+<p>Implemented an API settings page to store the API key securely in the OS keychain. Built the SSE connection logic in the React frontend.</p>
+<hr />
+<h3>Testing</h3>
+<p>Successfully sent a prompt to the LLM and streamed the response back to the UI in real-time.</p>
+<hr />
+<h3>Problems Encountered</h3>
+<p>API keys were initially exposed in the renderer process memory.</p>
+<hr />
+<h3>Solutions Applied</h3>
+<p>Refactored the architecture to keep API keys strictly in the Electron main process, proxying requests securely.</p>
+<hr />
+<h3>Deliverables</h3>
+<p>Working AI chat integrated with live LLM API via streaming.</p>
+<hr />
+<h3>Knowledge Gained</h3>
+<p>Learned secure credential management in Electron applications.</p>
+<hr />
+<h3>Next Day Plan</h3>
+<p>Implement the Language Server Protocol (LSP) basics for ST code analysis.</p>
+<hr />
+<h3>Time Distribution</h3>
+<ul>
+<li><strong>Research:</strong> 2.0 hours</li>
+<li><strong>Implementation:</strong> 4.0 hours</li>
+<li><strong>Testing:</strong> 0.5 hours</li>
+<li><strong>Documentation:</strong> 0.5 hours</li>
+</ul>
+<div style='page-break-after: always;'></div>
+
+<h2>DAY 7</h2>
+<p><strong>Date:</strong> 7 July 2026<br />
+<strong>Working Hours:</strong> 7.5 hours<br />
+<strong>Objective:</strong> Integrate basic Language Server Protocol (LSP) for code analysis.  </p>
+<hr />
+<h3>Background</h3>
+<p>For the AI to provide context-aware suggestions, it needs to understand the AST (Abstract Syntax Tree) of the PLC code.</p>
+<hr />
+<h3>Research Activities</h3>
+<p>Studied the Language Server Protocol specification and tools for parsing Structured Text.</p>
+<hr />
+<h3>Concepts Learned</h3>
+<ol>
+<li>LSP: A standardized protocol for providing editor features like auto-complete and diagnostics.</li>
+<li>AST Parsing: Converting raw source code into a structured tree representing the logic.</li>
+</ol>
+<hr />
+<h3>Engineering Analysis</h3>
+<p>Building a full LSP from scratch is out of scope, but a lightweight AST parser for variable extraction is necessary for the AI context window.</p>
+<hr />
+<h3>Implementation Work</h3>
+<p>Wrote a custom Regex-based tokenizer and simple AST builder to extract variable declarations (<code>VAR ... END_VAR</code>) from ST code.</p>
+<hr />
+<h3>Testing</h3>
+<p>Tested the parser against complex ST files to verify variable extraction accuracy.</p>
+<hr />
+<h3>Problems Encountered</h3>
+<p>Nested comments in ST <code>(* ... (* ... *) ... *)</code> were breaking the regex parser.</p>
+<hr />
+<h3>Solutions Applied</h3>
+<p>Switched from simple regex to a state-machine based lexer to correctly handle nested comments and string literals.</p>
+<hr />
+<h3>Deliverables</h3>
+<p>A lightweight ST parser capable of extracting variable symbols.</p>
+<hr />
+<h3>Knowledge Gained</h3>
+<p>Gained fundamental knowledge of lexing, parsing, and compiler frontend design.</p>
+<hr />
+<h3>Next Day Plan</h3>
+<p>Hook the AI agent into the visual editor internals.</p>
+<hr />
+<h3>Time Distribution</h3>
+<ul>
+<li><strong>Research:</strong> 3.0 hours</li>
+<li><strong>Implementation:</strong> 3.5 hours</li>
+<li><strong>Testing:</strong> 0.5 hours</li>
+<li><strong>Documentation:</strong> 0.5 hours</li>
+</ul>
+<div style='page-break-after: always;'></div>
+
+<h2>DAY 8</h2>
+<p><strong>Date:</strong> 8 July 2026<br />
+<strong>Working Hours:</strong> 8.0 hours<br />
+<strong>Objective:</strong> Hooking AI Into Editor Internals (React Flow).  </p>
+<hr />
+<h3>Background</h3>
+<p>To allow the AI to generate Ladder Logic, it needs direct programmatic control over the visual editor's state.</p>
+<hr />
+<h3>Research Activities</h3>
+<p>Deep dive into React Flow architecture, node management, and edge routing.</p>
+<hr />
+<h3>Concepts Learned</h3>
+<ol>
+<li>React Flow: A library for building node-based graphical interfaces.</li>
+<li>Visual Programming Graphs: Representing PLC ladder logic as a directed graph.</li>
+</ol>
+<hr />
+<h3>Engineering Analysis</h3>
+<p>UI automation (simulating mouse clicks) is too brittle. The AI must invoke internal state-management APIs directly to insert nodes and edges.</p>
+<hr />
+<h3>Implementation Work</h3>
+<p>Patched the editor rendering bundle to expose the React Flow instance globally. Created wrapper functions <code>insertNode(type, position)</code> and <code>connectNodes(source, target)</code>.</p>
+<hr />
+<h3>Testing</h3>
+<p>Used the browser console to programmatically construct a simple latching circuit.</p>
+<hr />
+<h3>Problems Encountered</h3>
+<p>Nodes inserted programmatically lacked the necessary internal metadata, causing the compiler to crash later.</p>
+<hr />
+<h3>Solutions Applied</h3>
+<p>Analyzed a manually created node's JSON structure and ensured the wrapper functions inject identical default metadata (e.g., execution order, data types).</p>
+<hr />
+<h3>Deliverables</h3>
+<p>API layer allowing programmatic manipulation of the visual ladder logic canvas.</p>
+<hr />
+<h3>Knowledge Gained</h3>
+<p>Mastered React Flow node lifecycle and data injection techniques.</p>
+<hr />
+<h3>Next Day Plan</h3>
+<p>Connect the programmatic API to the AI Agent's tool execution layer and test tool calling.</p>
+<hr />
+<h3>Time Distribution</h3>
+<ul>
+<li><strong>Research:</strong> 2.5 hours</li>
+<li><strong>Implementation:</strong> 4.0 hours</li>
+<li><strong>Testing:</strong> 1.0 hours</li>
+<li><strong>Documentation:</strong> 0.5 hours</li>
+</ul>
+<div style='page-break-after: always;'></div>
+
+<h2>DAY 9</h2>
+<p><strong>Date:</strong> 9 July 2026<br />
+<strong>Working Hours:</strong> 6.5 hours<br />
+<strong>Objective:</strong> State Management and Exposing the Zustand Store.  </p>
+<hr />
+<h3>Background</h3>
+<p>The visual editor relies heavily on global state. The AI tools must sync perfectly with this state.</p>
+<hr />
+<h3>Research Activities</h3>
+<p>Analyzed how Zustand manages state in the existing application architecture.</p>
+<hr />
+<h3>Concepts Learned</h3>
+<ol>
+<li>Zustand Store: A small, fast state-management library for React.</li>
+<li>Store Hydration: Loading serialized project data into the active state.</li>
+</ol>
+<hr />
+<h3>Engineering Analysis</h3>
+<p>By exposing the Zustand store, the AI can read the entire project context (all variables, POUs, and configurations) instantly without parsing files.</p>
+<hr />
+<h3>Implementation Work</h3>
+<p>Exposed <code>useProjectStore</code> to the <code>window</code> object in development mode. Wrote a tool for the AI called <code>get_project_context</code> that dumps the store to a JSON string.</p>
+<hr />
+<h3>Testing</h3>
+<p>Invoked <code>get_project_context</code> via the AI prompt and verified the LLM could 'see' the current variables.</p>
+<hr />
+<h3>Problems Encountered</h3>
+<p>First encounter with a critical flaw: The AI attempted to insert multiple nodes and variables simultaneously by firing multiple tool calls in parallel. This caused state corruption in Zustand.</p>
+<hr />
+<h3>Solutions Applied</h3>
+<p>Realized that React state updates are asynchronous. Parallel tool executions cause race conditions. Began planning a sequential execution constraint for the Agent.</p>
+<hr />
+<h3>Deliverables</h3>
+<p>Optimized project context extraction tool, but identified a major architectural flaw regarding concurrent AI tasks.</p>
+<hr />
+<h3>Knowledge Gained</h3>
+<p>Learned that AI tool execution must be carefully synchronized with UI state lifecycles to prevent race conditions.</p>
+<hr />
+<h3>Next Day Plan</h3>
+<p>Implement an execution queue to handle the concurrent task error.</p>
+<hr />
+<h3>Time Distribution</h3>
+<ul>
+<li><strong>Research:</strong> 2.0 hours</li>
+<li><strong>Implementation:</strong> 3.0 hours</li>
+<li><strong>Testing:</strong> 1.0 hours</li>
+<li><strong>Documentation:</strong> 0.5 hours</li>
+</ul>
+<div style='page-break-after: always;'></div>
+
+<h2>DAY 10</h2>
+<p><strong>Date:</strong> 10 July 2026<br />
+<strong>Working Hours:</strong> 7.0 hours<br />
+<strong>Objective:</strong> Addressing the 'Multiple Task' Error in AI Logic Generation.  </p>
+<hr />
+<h3>Background</h3>
+<p>The project is currently blocked by the AI assistant attempting to perform multiple tasks at the same time, leading to fatal crashes.</p>
+<hr />
+<h3>Research Activities</h3>
+<p>Studied asynchronous queue implementations in JavaScript and Mutex locks.</p>
+<hr />
+<h3>Concepts Learned</h3>
+<ol>
+<li>Concurrency Errors: When two operations attempt to modify the same state simultaneously.</li>
+<li>Execution Queue: A data structure that ensures tasks are executed one after the other.</li>
+</ol>
+<hr />
+<h3>Engineering Analysis</h3>
+<p>The AI is too eager. When asked to 'Create a motor circuit', it generates 5 tool calls and dispatches them simultaneously. This throws the 'multiple task cannot be done at the same time' error in our backend.</p>
+<hr />
+<h3>Implementation Work</h3>
+<p>Implemented an asynchronous queue <code>AIToolQueue</code>. Every tool call requested by the LLM is pushed to the queue. The queue awaits the resolution of each React Flow state update before popping the next task.</p>
+<hr />
+<h3>Testing</h3>
+<p>Tested the queue with a complex AI prompt. The tasks executed sequentially.</p>
+<hr />
+<h3>Problems Encountered</h3>
+<p>While sequential execution prevented the crash, the LLM timed out waiting for the responses from the backend, breaking the AI chat loop.</p>
+<hr />
+<h3>Solutions Applied</h3>
+<p>For now, instructed the LLM via system prompt to ONLY dispatch ONE tool call per response. This is a temporary band-aid.</p>
+<hr />
+<h3>Deliverables</h3>
+<p>A highly restricted AI Agent that can only perform one action per turn.</p>
+<hr />
+<h3>Knowledge Gained</h3>
+<p>Gained a deep understanding of the difficulties in mapping LLM concurrency to UI thread execution.</p>
+<hr />
+<h3>Next Day Plan</h3>
+<p>Optimize API calls using a Smart Trigger heuristic to save tokens.</p>
+<hr />
+<h3>Time Distribution</h3>
+<ul>
+<li><strong>Research:</strong> 2.5 hours</li>
+<li><strong>Implementation:</strong> 3.5 hours</li>
+<li><strong>Testing:</strong> 1.0 hours</li>
+<li><strong>Documentation:</strong> 0.0 hours</li>
+</ul>
+<div style='page-break-after: always;'></div>
+
+<h2>DAY 11</h2>
+<p><strong>Date:</strong> 11 July 2026<br />
+<strong>Working Hours:</strong> 7.5 hours<br />
+<strong>Objective:</strong> Optimizing Agentic IDE Intelligence with a Smart Trigger.  </p>
+<hr />
+<h3>Background</h3>
+<p>Calling the LLM with full context for simple queries (e.g., 'Hello') wastes tokens and increases latency.</p>
+<hr />
+<h3>Research Activities</h3>
+<p>Studied intent classification and heuristic-based routing.</p>
+<hr />
+<h3>Concepts Learned</h3>
+<ol>
+<li>Smart Trigger: A local, fast evaluation to determine if a full AI Agent chain is necessary.</li>
+<li>Latency Optimization: Reducing the time-to-first-token for the user.</li>
+</ol>
+<hr />
+<h3>Engineering Analysis</h3>
+<p>A lightweight regex/keyword heuristic on the frontend can intercept conversational queries and respond locally or route to a cheaper/faster model without invoking tool execution logic.</p>
+<hr />
+<h3>Implementation Work</h3>
+<p>Implemented a routing layer. If the user prompt matches generic greetings or simple help commands, it bypasses the Agent loop and responds directly. Also fixed API serialization errors specific to the Llama 3.1 model.</p>
+<hr />
+<h3>Testing</h3>
+<p>Verified that 'Hello' returns in &lt; 100ms, while 'Create a motor starter circuit' correctly triggers the Agent workflow.</p>
+<hr />
+<h3>Problems Encountered</h3>
+<p>The AI assistant is still fundamentally incomplete. If a user bypasses the smart trigger with a complex coding request, the AI still occasionally triggers the 'multiple task cannot be done at the same time' error if it ignores the system prompt constraints.</p>
+<hr />
+<h3>Solutions Applied</h3>
+<p>Added a hard abort in the middleware: If <code>tool_calls.length &gt; 1</code>, throw a hard error back to the LLM forcing it to retry sequentially.</p>
+<hr />
+<h3>Deliverables</h3>
+<p>Optimized AI routing layer resulting in a highly responsive UI, though the AI assistant remains an incomplete prototype.</p>
+<hr />
+<h3>Knowledge Gained</h3>
+<p>Gained practical experience in system-level latency optimization for AI applications.</p>
+<hr />
+<h3>Next Day Plan</h3>
+<p>Hardware Abstraction Layer (HAL) planning.</p>
+<hr />
+<h3>Time Distribution</h3>
+<ul>
+<li><strong>Research:</strong> 1.5 hours</li>
+<li><strong>Implementation:</strong> 4.0 hours</li>
+<li><strong>Testing:</strong> 1.5 hours</li>
+<li><strong>Documentation:</strong> 0.5 hours</li>
+</ul>
+<div style='page-break-after: always;'></div>
+
+<h2>DAY 12</h2>
+<p><strong>Date:</strong> 12 July 2026<br />
+<strong>Working Hours:</strong> 6.5 hours<br />
+<strong>Objective:</strong> Hardware Abstraction Layer (HAL) architecture planning.  </p>
+<hr />
+<h3>Background</h3>
+<p>AgenticPLC is not just software; it must interact with custom industrial hardware. A HAL is required to decouple the software from the specific hardware.</p>
+<hr />
+<h3>Research Activities</h3>
+<p>Studied HAL designs in embedded systems and RTOS (Real-Time Operating Systems).</p>
+<hr />
+<h3>Concepts Learned</h3>
+<ol>
+<li>HAL: A software layer that hides the underlying hardware details from the upper software layers.</li>
+<li>Embedded Interfaces: How microcontrollers communicate with sensors (GPIO, ADC).</li>
+</ol>
+<hr />
+<h3>Engineering Analysis</h3>
+<p>The compiler will generate C code. The HAL must provide standard C functions (e.g., <code>read_digital_input(pin)</code>) that map to the specific hardware registers of the chosen microcontroller.</p>
+<hr />
+<h3>Implementation Work</h3>
+<p>Drafted the HAL API specification. Defined the standard function signatures for digital I/O, analog I/O, and PWM.</p>
+<hr />
+<h3>Testing</h3>
+<p>Reviewed the API with sample C programs to ensure it is generic enough.</p>
+<hr />
+<h3>Problems Encountered</h3>
+<p>Different microcontrollers have different pin multiplexing architectures, complicating a generic pin mapping.</p>
+<hr />
+<h3>Solutions Applied</h3>
+<p>Decided to implement a configuration file (JSON based) that maps generic logical pins (e.g., %IX0.0) to hardware-specific physical pins.</p>
+<hr />
+<h3>Deliverables</h3>
+<p>HAL Architecture Document and API Specification.</p>
+<hr />
+<h3>Knowledge Gained</h3>
+<p>Gained a deep appreciation for the complexities of cross-platform embedded software design.</p>
+<hr />
+<h3>Next Day Plan</h3>
+<p>Select the specific embedded controller and research communication interfaces.</p>
+<hr />
+<h3>Time Distribution</h3>
+<ul>
+<li><strong>Research:</strong> 4.0 hours</li>
+<li><strong>Implementation:</strong> 1.5 hours</li>
+<li><strong>Testing:</strong> 0.0 hours</li>
+<li><strong>Documentation:</strong> 1.0 hours</li>
+</ul>
+<div style='page-break-after: always;'></div>
+
+<h2>DAY 13</h2>
+<p><strong>Date:</strong> 13 July 2026<br />
+<strong>Working Hours:</strong> 7.0 hours<br />
+<strong>Objective:</strong> Embedded Controller Selection and Communication Interfaces.  </p>
+<hr />
+<h3>Background</h3>
+<p>A physical hardware target is needed for the custom PLC implementation. Communication protocols must be established.</p>
+<hr />
+<h3>Research Activities</h3>
+<p>Compared ESP32, STM32, and Raspberry Pi Pico for the custom hardware target. Studied UART, SPI, and I2C protocols.</p>
+<hr />
+<h3>Concepts Learned</h3>
+<ol>
+<li>Microcontroller Architecture: ARM Cortex-M vs. Xtensa.</li>
+<li>UART/SPI/I2C: Serial communication protocols for peripheral interaction.</li>
+</ol>
+<hr />
+<h3>Engineering Analysis</h3>
+<p>The STM32 offers excellent real-time performance and robust industrial peripheral support. Selected STM32 as the primary target architecture.</p>
+<hr />
+<h3>Implementation Work</h3>
+<p>Wrote documentation detailing the hardware requirements. Began designing the software driver skeleton for UART communication between the IDE and the hardware.</p>
+<hr />
+<h3>Testing</h3>
+<p>N/A - Design phase.</p>
+<hr />
+<h3>Problems Encountered</h3>
+<p>Ensuring deterministic timing for the PLC scan cycle on a microcontroller running an RTOS is challenging.</p>
+<hr />
+<h3>Solutions Applied</h3>
+<p>Planned to utilize hardware timers and high-priority interrupts to guarantee the PLC scan cycle timing, independent of the communication threads.</p>
+<hr />
+<h3>Deliverables</h3>
+<p>Hardware selection document and driver skeletons.</p>
+<hr />
+<h3>Knowledge Gained</h3>
+<p>Understood the trade-offs between different microcontroller architectures for industrial control.</p>
+<hr />
+<h3>Next Day Plan</h3>
+<p>Research industrial communication protocols (Modbus, OPC UA).</p>
+<hr />
+<h3>Time Distribution</h3>
+<ul>
+<li><strong>Research:</strong> 5.0 hours</li>
+<li><strong>Implementation:</strong> 1.5 hours</li>
+<li><strong>Testing:</strong> 0.0 hours</li>
+<li><strong>Documentation:</strong> 0.5 hours</li>
+</ul>
+<div style='page-break-after: always;'></div>
+
+<h2>DAY 14</h2>
+<p><strong>Date:</strong> 14 July 2026<br />
+<strong>Working Hours:</strong> 7.5 hours<br />
+<strong>Objective:</strong> Industrial Protocol Integration Analysis (Modbus).  </p>
+<hr />
+<h3>Background</h3>
+<p>To be a true PLC, AgenticPLC must support standard industrial protocols like Modbus RTU/TCP.</p>
+<hr />
+<h3>Research Activities</h3>
+<p>Read the Modbus protocol specification. Analyzed open-source Modbus C libraries.</p>
+<hr />
+<h3>Concepts Learned</h3>
+<ol>
+<li>Modbus RTU/TCP: A widely used master/slave industrial communication protocol.</li>
+<li>Holding Registers / Coils: The memory structure used by Modbus.</li>
+</ol>
+<hr />
+<h3>Engineering Analysis</h3>
+<p>Integrating an existing library (like libmodbus) is preferable to writing the protocol from scratch. The HAL needs to map Modbus addresses to the IEC 61131-3 memory model.</p>
+<hr />
+<h3>Implementation Work</h3>
+<p>Drafted the memory mapping algorithm to align Modbus registers (0x0000) with PLC memory locations.</p>
+<hr />
+<h3>Testing</h3>
+<p>Created a python script to simulate a Modbus slave and verify the memory mapping logic.</p>
+<hr />
+<h3>Problems Encountered</h3>
+<p>Endianness (byte order) differences between the STM32 and Modbus protocol standard.</p>
+<hr />
+<h3>Solutions Applied</h3>
+<p>Added byte-swapping utility functions in the HAL to ensure cross-platform compatibility.</p>
+<hr />
+<h3>Deliverables</h3>
+<p>Modbus memory mapping documentation and utility functions.</p>
+<hr />
+<h3>Knowledge Gained</h3>
+<p>Mastered the intricacies of the Modbus protocol and endianness issues in embedded systems.</p>
+<hr />
+<h3>Next Day Plan</h3>
+<p>Develop the Custom Hardware Configuration UI in the IDE.</p>
+<hr />
+<h3>Time Distribution</h3>
+<ul>
+<li><strong>Research:</strong> 3.0 hours</li>
+<li><strong>Implementation:</strong> 3.5 hours</li>
+<li><strong>Testing:</strong> 0.5 hours</li>
+<li><strong>Documentation:</strong> 0.5 hours</li>
+</ul>
+<div style='page-break-after: always;'></div>
+
+<h2>DAY 15</h2>
+<p><strong>Date:</strong> 15 July 2026<br />
+<strong>Working Hours:</strong> 8.0 hours<br />
+<strong>Objective:</strong> Develop Custom Hardware Configuration UI.  </p>
+<hr />
+<h3>Background</h3>
+<p>Users need a graphical way to map logical PLC variables to physical microcontroller pins.</p>
+<hr />
+<h3>Research Activities</h3>
+<p>Reviewed UI designs of existing hardware configurators (e.g., STM32CubeMX).</p>
+<hr />
+<h3>Concepts Learned</h3>
+<ol>
+<li>Dynamic Form Generation: Creating UI forms based on a JSON schema describing the selected hardware.</li>
+<li>Data Binding: Linking the UI selections to the internal Zustand store.</li>
+</ol>
+<hr />
+<h3>Engineering Analysis</h3>
+<p>The UI needs to be flexible enough to support future hardware boards. A schema-driven approach is best.</p>
+<hr />
+<h3>Implementation Work</h3>
+<p>Built the <code>HardwareConfig</code> component in React. Implemented a dynamic table where users can assign variables to physical pins based on the selected board profile.</p>
+<hr />
+<h3>Testing</h3>
+<p>Verified that pin conflicts (e.g., assigning two variables to the same physical pin) trigger immediate validation errors in the UI.</p>
+<hr />
+<h3>Problems Encountered</h3>
+<p>Managing the complex state of pin assignments across multiple boards was causing state mutation bugs.</p>
+<hr />
+<h3>Solutions Applied</h3>
+<p>Refactored the Zustand store to use Immer for immutable state updates, completely eliminating the mutation bugs.</p>
+<hr />
+<h3>Deliverables</h3>
+<p>Working Custom Hardware Configuration UI.</p>
+<hr />
+<h3>Knowledge Gained</h3>
+<p>Gained advanced experience in complex React state management and validation logic.</p>
+<hr />
+<h3>Next Day Plan</h3>
+<p>Harden AI variable stability and revisit the AI completion status.</p>
+<hr />
+<h3>Time Distribution</h3>
+<ul>
+<li><strong>Research:</strong> 1.0 hours</li>
+<li><strong>Implementation:</strong> 5.0 hours</li>
+<li><strong>Testing:</strong> 1.5 hours</li>
+<li><strong>Documentation:</strong> 0.5 hours</li>
+</ul>
+<div style='page-break-after: always;'></div>
+
+<h2>DAY 16</h2>
+<p><strong>Date:</strong> 16 July 2026<br />
+<strong>Working Hours:</strong> 7.0 hours<br />
+<strong>Objective:</strong> Hardening AgenticPLC Variable Stability &amp; Schema Compliance.  </p>
+<hr />
+<h3>Background</h3>
+<p>The AI frequently hallucinates variable names when generating logic, causing compilation failures. Strict enforcement is needed.</p>
+<hr />
+<h3>Research Activities</h3>
+<p>Investigated JSON Schema validation libraries (Zod, Ajv).</p>
+<hr />
+<h3>Concepts Learned</h3>
+<ol>
+<li>AI Hallucination: When an LLM generates plausible but incorrect data.</li>
+<li>Schema Compliance: Forcing the LLM output to match a predefined structure.</li>
+</ol>
+<hr />
+<h3>Engineering Analysis</h3>
+<p>We must enforce strict schema compliance for variable injection. The AI tool must reject variables that don't exist in the project store.</p>
+<hr />
+<h3>Implementation Work</h3>
+<p>Integrated Zod for schema validation on the AI tool endpoints. When the AI attempts to use a variable, the middleware checks the Zustand store. If it doesn't exist, it throws an error back to the AI.</p>
+<hr />
+<h3>Testing</h3>
+<p>Prompted the AI to use a fake variable 'Motor_X'. The system caught the error and forced the AI to declare it first.</p>
+<hr />
+<h3>Problems Encountered</h3>
+<p>The AI assistant's completion status took a hit today. When presented with the schema error, the LLM attempted to fix it by dispatching both a 'declare_variable' and an 'insert_node' command simultaneously. This triggered the dreaded 'multiple task cannot be done at the same time' error again.</p>
+<hr />
+<h3>Solutions Applied</h3>
+<p>Improved the error messaging sent back to the AI, explicitly reminding it of the single-task constraint. The AI assistant is still clearly incomplete when handling complex error recoveries.</p>
+<hr />
+<h3>Deliverables</h3>
+<p>Robust schema validation layer, though AI execution remains fragile.</p>
+<hr />
+<h3>Knowledge Gained</h3>
+<p>Learned practical strategies for mitigating LLM hallucinations in structured environments, and verified that agent concurrency is exceptionally hard to solve.</p>
+<hr />
+<h3>Next Day Plan</h3>
+<p>Implement the 'Screen-Scraper' fallback for variable rendering.</p>
+<hr />
+<h3>Time Distribution</h3>
+<ul>
+<li><strong>Research:</strong> 2.0 hours</li>
+<li><strong>Implementation:</strong> 4.0 hours</li>
+<li><strong>Testing:</strong> 0.5 hours</li>
+<li><strong>Documentation:</strong> 0.5 hours</li>
+</ul>
+<div style='page-break-after: always;'></div>
+
+<h2>DAY 17</h2>
+<p><strong>Date:</strong> 17 July 2026<br />
+<strong>Working Hours:</strong> 7.5 hours<br />
+<strong>Objective:</strong> Implement the Screen-Scraper fallback for UI rendering.  </p>
+<hr />
+<h3>Background</h3>
+<p>Even with schema validation, the AI occasionally produces broken JSON that fails to render correctly in the UI grid.</p>
+<hr />
+<h3>Research Activities</h3>
+<p>Analyzed fail-safe mechanisms in UI rendering pipelines.</p>
+<hr />
+<h3>Concepts Learned</h3>
+<ol>
+<li>Defensive Programming: Anticipating and gracefully handling invalid data states.</li>
+<li>Fallback Rendering: Using alternative data sources when the primary source is corrupted.</li>
+</ol>
+<hr />
+<h3>Engineering Analysis</h3>
+<p>If the AI's internal representation of the variables desyncs from the editor, the UI breaks. A 'Screen-Scraper' fallback can read the variables directly from the code text if the JSON state is invalid.</p>
+<hr />
+<h3>Implementation Work</h3>
+<p>Wrote a utility that parses the Structured Text editor content on-the-fly. If the Zustand variable store throws a rendering error, the UI falls back to displaying the variables extracted by the scraper.</p>
+<hr />
+<h3>Testing</h3>
+<p>Corrupted the Zustand store manually. The UI successfully recovered and displayed the correct variables scraped from the editor.</p>
+<hr />
+<h3>Problems Encountered</h3>
+<p>The screen-scraper was running on every keystroke, causing performance lag.</p>
+<hr />
+<h3>Solutions Applied</h3>
+<p>Debounced the scraper execution to run only after 500ms of inactivity.</p>
+<hr />
+<h3>Deliverables</h3>
+<p>Fault-tolerant UI rendering system with a robust fallback mechanism.</p>
+<hr />
+<h3>Knowledge Gained</h3>
+<p>Mastered defensive UI programming and performance optimization with debouncing.</p>
+<hr />
+<h3>Next Day Plan</h3>
+<p>Focus on AgenticPLC IDE overall performance optimization.</p>
+<hr />
+<h3>Time Distribution</h3>
+<ul>
+<li><strong>Research:</strong> 1.5 hours</li>
+<li><strong>Implementation:</strong> 4.5 hours</li>
+<li><strong>Testing:</strong> 1.0 hours</li>
+<li><strong>Documentation:</strong> 0.5 hours</li>
+</ul>
+<div style='page-break-after: always;'></div>
+
+<h2>DAY 18</h2>
+<p><strong>Date:</strong> 18 July 2026<br />
+<strong>Working Hours:</strong> 6.5 hours<br />
+<strong>Objective:</strong> IDE Performance Optimization and UI Animations.  </p>
+<hr />
+<h3>Background</h3>
+<p>To achieve a premium R&amp;D feel, the IDE must be highly responsive and visually dynamic.</p>
+<hr />
+<h3>Research Activities</h3>
+<p>Studied Framer Motion and CSS performance optimization techniques.</p>
+<hr />
+<h3>Concepts Learned</h3>
+<ol>
+<li>Layout Thrashing: When DOM updates cause the browser to repeatedly recalculate layout.</li>
+<li>Micro-animations: Small, subtle animations that provide user feedback.</li>
+</ol>
+<hr />
+<h3>Engineering Analysis</h3>
+<p>The visual editor and chat panel feel stiff. Adding subtle enter/exit animations and optimizing heavy DOM elements will improve the perceived quality.</p>
+<hr />
+<h3>Implementation Work</h3>
+<p>Integrated Framer Motion. Added animated transitions for dialog boxes, toast notifications, and the AI chat bubbles. Optimized the React Flow rendering by memoizing custom node components.</p>
+<hr />
+<h3>Testing</h3>
+<p>Profiled the application using Chrome DevTools. Achieved a solid 60FPS during complex node dragging.</p>
+<hr />
+<h3>Problems Encountered</h3>
+<p>Animating React Flow nodes caused rendering artifacts due to conflicting transform styles.</p>
+<hr />
+<h3>Solutions Applied</h3>
+<p>Restricted animations to the UI overlay panels and avoided animating the heavy canvas elements directly.</p>
+<hr />
+<h3>Deliverables</h3>
+<p>A highly performant, premium-feeling IDE interface.</p>
+<hr />
+<h3>Knowledge Gained</h3>
+<p>Gained expertise in React performance profiling and advanced CSS/Framer Motion animations.</p>
+<hr />
+<h3>Next Day Plan</h3>
+<p>Integrate the IEC 61131-3 compiler.</p>
+<hr />
+<h3>Time Distribution</h3>
+<ul>
+<li><strong>Research:</strong> 1.5 hours</li>
+<li><strong>Implementation:</strong> 4.0 hours</li>
+<li><strong>Testing:</strong> 0.5 hours</li>
+<li><strong>Documentation:</strong> 0.5 hours</li>
+</ul>
+<div style='page-break-after: always;'></div>
+
+<h2>DAY 19</h2>
+<p><strong>Date:</strong> 19 July 2026<br />
+<strong>Working Hours:</strong> 8.0 hours<br />
+<strong>Objective:</strong> Compiler Integration and Build Pipeline.  </p>
+<hr />
+<h3>Background</h3>
+<p>The IDE must compile the visual logic and ST code into C code that can be executed on the hardware.</p>
+<hr />
+<h3>Research Activities</h3>
+<p>Analyzed the MatIEC compiler architecture (the open-source IEC 61131-3 compiler).</p>
+<hr />
+<h3>Concepts Learned</h3>
+<ol>
+<li>ST to C Compilation: Translating IEC 61131-3 semantics into standard C.</li>
+<li>Build Automation: Automating the invocation of compilers and linkers.</li>
+</ol>
+<hr />
+<h3>Engineering Analysis</h3>
+<p>AgenticPLC needs to transparently invoke MatIEC in the background, capture errors, and map them back to the specific lines in the UI.</p>
+<hr />
+<h3>Implementation Work</h3>
+<p>Wrote a Node.js wrapper around the MatIEC executable. Implemented a build pipeline that exports the project to ST, runs MatIEC, and parses the stderr output.</p>
+<hr />
+<h3>Testing</h3>
+<p>Created a project with intentional syntax errors. Verified that the build pipeline catches the errors and displays them in the IDE console.</p>
+<hr />
+<h3>Problems Encountered</h3>
+<p>MatIEC error messages are cryptic and refer to the generated ST file, not the visual UI nodes.</p>
+<hr />
+<h3>Solutions Applied</h3>
+<p>Implemented a source-map equivalent. When generating the ST, special comments are inserted linking ST lines back to their origin UUIDs in the visual editor, allowing accurate error highlighting.</p>
+<hr />
+<h3>Deliverables</h3>
+<p>Functional compiler pipeline with accurate error reporting.</p>
+<hr />
+<h3>Knowledge Gained</h3>
+<p>Understood the complexities of cross-compilation and error mapping in visual programming environments.</p>
+<hr />
+<h3>Next Day Plan</h3>
+<p>Develop the Runtime Integration and Simulation Setup.</p>
+<hr />
+<h3>Time Distribution</h3>
+<ul>
+<li><strong>Research:</strong> 2.5 hours</li>
+<li><strong>Implementation:</strong> 4.0 hours</li>
+<li><strong>Testing:</strong> 1.0 hours</li>
+<li><strong>Documentation:</strong> 0.5 hours</li>
+</ul>
+<div style='page-break-after: always;'></div>
+
+<h2>DAY 20</h2>
+<p><strong>Date:</strong> 20 July 2026<br />
+<strong>Working Hours:</strong> 7.0 hours<br />
+<strong>Objective:</strong> Runtime Integration and Software Simulation.  </p>
+<hr />
+<h3>Background</h3>
+<p>Before deploying to physical hardware, users must be able to simulate their logic locally.</p>
+<hr />
+<h3>Research Activities</h3>
+<p>Investigated ways to compile the generated C code as a local executable on Windows.</p>
+<hr />
+<h3>Concepts Learned</h3>
+<ol>
+<li>GCC / MinGW: Toolchains for compiling C code on Windows.</li>
+<li>Shared Memory: IPC mechanism for communicating between the IDE and the simulated PLC runtime.</li>
+</ol>
+<hr />
+<h3>Engineering Analysis</h3>
+<p>The IDE needs to compile the project into a local executable, run it in the background, and establish a communication channel to read/write live variables for debugging.</p>
+<hr />
+<h3>Implementation Work</h3>
+<p>Configured a MinGW build script. Modified the HAL to use local shared memory instead of physical pins when in 'Simulation Mode'. Implemented a WebSocket server in the IDE to stream live data from the simulator.</p>
+<hr />
+<h3>Testing</h3>
+<p>Ran a simple counter program in simulation mode and watched the variable values update live in the UI.</p>
+<hr />
+<h3>Problems Encountered</h3>
+<p>The Windows firewall repeatedly blocked the local simulator executable.</p>
+<hr />
+<h3>Solutions Applied</h3>
+<p>Switched from network sockets to OS-level named pipes for local IPC, completely bypassing firewall restrictions.</p>
+<hr />
+<h3>Deliverables</h3>
+<p>Fully functional local PLC simulation environment.</p>
+<hr />
+<h3>Knowledge Gained</h3>
+<p>Mastered local IPC mechanisms and simulation architecture.</p>
+<hr />
+<h3>Next Day Plan</h3>
+<p>End-to-End System Testing of all software features.</p>
+<hr />
+<h3>Time Distribution</h3>
+<ul>
+<li><strong>Research:</strong> 2.0 hours</li>
+<li><strong>Implementation:</strong> 4.0 hours</li>
+<li><strong>Testing:</strong> 0.5 hours</li>
+<li><strong>Documentation:</strong> 0.5 hours</li>
+</ul>
+<div style='page-break-after: always;'></div>
+
+<h2>DAY 21</h2>
+<p><strong>Date:</strong> 21 July 2026<br />
+<strong>Working Hours:</strong> 6.5 hours<br />
+<strong>Objective:</strong> End-to-End Software System Testing.  </p>
+<hr />
+<h3>Background</h3>
+<p>All individual modules (UI, AI Agent, Compiler, Simulator) must be tested holistically to identify integration bugs.</p>
+<hr />
+<h3>Research Activities</h3>
+<p>Reviewed software testing methodologies for complex IDEs.</p>
+<hr />
+<h3>Concepts Learned</h3>
+<ol>
+<li>End-to-End (E2E) Testing: Testing the entire application flow from start to finish.</li>
+<li>Regression Testing: Ensuring new features didn't break old functionality.</li>
+</ol>
+<hr />
+<h3>Engineering Analysis</h3>
+<p>A comprehensive test scenario is needed: Create a project using AI, modify it manually, compile it, and simulate it.</p>
+<hr />
+<h3>Implementation Work</h3>
+<p>Executed multiple test scenarios across Windows 10 and Windows 11 environments.</p>
+<hr />
+<h3>Testing</h3>
+<p>While manual IDE functions and simulation worked flawlessly, E2E testing confirmed that the complete AI assistant is not completed yet. When tasked with building an entire 10-rung logic system, the agent flooded the API queue, causing the 'multiple task cannot be done at the same time' error, crashing the visual editor.</p>
+<hr />
+<h3>Problems Encountered</h3>
+<p>The AI assistant is unstable for complex, generative tasks due to unresolved state synchronization issues.</p>
+<hr />
+<h3>Solutions Applied</h3>
+<p>For the scope of this project, the AI assistant will be documented as an 'experimental feature' intended for single-rung modifications rather than full-scale project generation.</p>
+<hr />
+<h3>Deliverables</h3>
+<p>Stable baseline IDE, but recognized incomplete state for the AI Assistant module.</p>
+<hr />
+<h3>Knowledge Gained</h3>
+<p>Gained practical experience in system integration testing and the importance of scoping down incomplete features for release.</p>
+<hr />
+<h3>Next Day Plan</h3>
+<p>Hardware Communication Simulation &amp; Testing.</p>
+<hr />
+<h3>Time Distribution</h3>
+<ul>
+<li><strong>Research:</strong> 1.0 hours</li>
+<li><strong>Implementation:</strong> 2.0 hours</li>
+<li><strong>Testing:</strong> 3.0 hours</li>
+<li><strong>Documentation:</strong> 0.5 hours</li>
+</ul>
+<div style='page-break-after: always;'></div>
+
+<h2>DAY 22</h2>
+<p><strong>Date:</strong> 22 July 2026<br />
+<strong>Working Hours:</strong> 7.0 hours<br />
+<strong>Objective:</strong> Hardware Communication Testing &amp; Integration.  </p>
+<hr />
+<h3>Background</h3>
+<p>The software must prove it can theoretically communicate with the selected custom hardware via the HAL.</p>
+<hr />
+<h3>Research Activities</h3>
+<p>Reviewed serial communication debugging tools.</p>
+<hr />
+<h3>Concepts Learned</h3>
+<ol>
+<li>Serial Loopback: Connecting TX to RX to test serial port functionality.</li>
+<li>Payload Serialization: Packing data efficiently for transmission.</li>
+</ol>
+<hr />
+<h3>Engineering Analysis</h3>
+<p>Since physical custom boards are pending, a mock serial device must be used to test the IDE's hardware communication layer.</p>
+<hr />
+<h3>Implementation Work</h3>
+<p>Wrote a Python script acting as a mock microcontroller over a virtual COM port. Integrated the serialport library into the AgenticPLC Electron main process.</p>
+<hr />
+<h3>Testing</h3>
+<p>Sent 'Start' and 'Stop' commands from the IDE to the Python mock device. Verified successful transmission and response.</p>
+<hr />
+<h3>Problems Encountered</h3>
+<p>Node.js serialport library had native compilation issues across different Windows build environments.</p>
+<hr />
+<h3>Solutions Applied</h3>
+<p>Switched to using pre-compiled binaries via <code>electron-rebuild</code> and explicitly defined the ABI version in the build config.</p>
+<hr />
+<h3>Deliverables</h3>
+<p>Verified serial communication bridge between IDE and mock hardware.</p>
+<hr />
+<h3>Knowledge Gained</h3>
+<p>Learned the complexities of using native Node.js modules in Electron applications.</p>
+<hr />
+<h3>Next Day Plan</h3>
+<p>UI State Glitch fixing and final polish.</p>
+<hr />
+<h3>Time Distribution</h3>
+<ul>
+<li><strong>Research:</strong> 1.5 hours</li>
+<li><strong>Implementation:</strong> 4.0 hours</li>
+<li><strong>Testing:</strong> 1.0 hours</li>
+<li><strong>Documentation:</strong> 0.5 hours</li>
+</ul>
+<div style='page-break-after: always;'></div>
+
+<h2>DAY 23</h2>
+<p><strong>Date:</strong> 23 July 2026<br />
+<strong>Working Hours:</strong> 7.5 hours<br />
+<strong>Objective:</strong> Fixing UI State Glitches and Final UX Polish.  </p>
+<hr />
+<h3>Background</h3>
+<p>A professional R&amp;D tool must be free of visual bugs and state inconsistencies before final documentation.</p>
+<hr />
+<h3>Research Activities</h3>
+<p>Reviewed user feedback (simulated) regarding IDE usability.</p>
+<hr />
+<h3>Concepts Learned</h3>
+<ol>
+<li>UX Polish: Refining the user interface to ensure it feels intuitive and robust.</li>
+<li>State Reconciliation: Ensuring all parts of the UI reflect the same underlying data.</li>
+</ol>
+<hr />
+<h3>Engineering Analysis</h3>
+<p>Several minor issues exist: Tooltips getting stuck, variable grid not updating immediately after an AI action, and dark mode contrast issues.</p>
+<hr />
+<h3>Implementation Work</h3>
+<p>Fixed the tooltip z-index issues. Forced a React re-render of the variable grid upon AI tool completion. Tweaked the dark mode color palette to improve text readability.</p>
+<hr />
+<h3>Testing</h3>
+<p>Extensive visual testing. Verified all edge cases in the UI.</p>
+<hr />
+<h3>Problems Encountered</h3>
+<p>The variable grid was losing focus after a re-render, interrupting the user's typing flow.</p>
+<hr />
+<h3>Solutions Applied</h3>
+<p>Implemented stable React keys and managed the focus state manually using <code>useRef</code> to restore focus after rendering.</p>
+<hr />
+<h3>Deliverables</h3>
+<p>Highly polished, bug-free user interface.</p>
+<hr />
+<h3>Knowledge Gained</h3>
+<p>Mastered advanced React focus management and UX refinement.</p>
+<hr />
+<h3>Next Day Plan</h3>
+<p>Begin comprehensive project documentation.</p>
+<hr />
+<h3>Time Distribution</h3>
+<ul>
+<li><strong>Research:</strong> 0.5 hours</li>
+<li><strong>Implementation:</strong> 5.0 hours</li>
+<li><strong>Testing:</strong> 1.5 hours</li>
+<li><strong>Documentation:</strong> 0.5 hours</li>
+</ul>
+<div style='page-break-after: always;'></div>
+
+<h2>DAY 24</h2>
+<p><strong>Date:</strong> 24 July 2026<br />
+<strong>Working Hours:</strong> 6.0 hours<br />
+<strong>Objective:</strong> Architecture Documentation and Diagramming.  </p>
+<hr />
+<h3>Background</h3>
+<p>The final year project requires professional documentation detailing the internal workings of AgenticPLC.</p>
+<hr />
+<h3>Research Activities</h3>
+<p>Reviewed industry-standard architecture documentation formats (C4 model).</p>
+<hr />
+<h3>Concepts Learned</h3>
+<ol>
+<li>System Context Diagram: Shows the system's interactions with external entities.</li>
+<li>Container Diagram: Shows the high-level architecture (Frontend, Backend, LLM, Compiler).</li>
+</ol>
+<hr />
+<h3>Engineering Analysis</h3>
+<p>Clear visual diagrams are essential to explain the complex AI tool-execution layer and the hardware abstraction layer to examiners.</p>
+<hr />
+<h3>Implementation Work</h3>
+<p>Used draw.io to create comprehensive architecture diagrams. Wrote detailed descriptions of the ReAct agent workflow.</p>
+<hr />
+<h3>Testing</h3>
+<p>N/A</p>
+<hr />
+<h3>Problems Encountered</h3>
+<p>Accurately depicting the agent's current state was tricky.</p>
+<hr />
+<h3>Solutions Applied</h3>
+<p>Explicitly documented the agent's concurrency limitations in the architecture diagram. Added a warning box indicating that 'multiple task cannot be done at the same time' error prevents full autonomous generation.</p>
+<hr />
+<h3>Deliverables</h3>
+<p>High-quality system architecture diagrams and technical descriptions.</p>
+<hr />
+<h3>Knowledge Gained</h3>
+<p>Improved technical communication and software architecture diagramming skills.</p>
+<hr />
+<h3>Next Day Plan</h3>
+<p>Write the hardware and compiler integration documentation.</p>
+<hr />
+<h3>Time Distribution</h3>
+<ul>
+<li><strong>Research:</strong> 1.0 hours</li>
+<li><strong>Implementation:</strong> 0.0 hours</li>
+<li><strong>Testing:</strong> 0.0 hours</li>
+<li><strong>Documentation:</strong> 5.0 hours</li>
+</ul>
+<div style='page-break-after: always;'></div>
+
+<h2>DAY 25</h2>
+<p><strong>Date:</strong> 25 July 2026<br />
+<strong>Working Hours:</strong> 6.5 hours<br />
+<strong>Objective:</strong> Hardware and Compiler Integration Documentation.  </p>
+<hr />
+<h3>Background</h3>
+<p>The engineering depth of the project lies heavily in the custom hardware and compiler integration, which must be thoroughly documented.</p>
+<hr />
+<h3>Research Activities</h3>
+<p>Reviewed notes from Day 12 to 15 regarding the HAL and Modbus implementation.</p>
+<hr />
+<h3>Concepts Learned</h3>
+<ol>
+<li>Hardware Mapping: Documenting how logical IEC addresses map to physical pins.</li>
+<li>Cross-Compilation: Explaining the ST to C pipeline.</li>
+</ol>
+<hr />
+<h3>Engineering Analysis</h3>
+<p>The documentation must clearly demonstrate the theoretical soundness of the custom hardware approach, even if the physical board is a prototype.</p>
+<hr />
+<h3>Implementation Work</h3>
+<p>Wrote sections detailing the MatIEC integration, the custom HAL API, and the memory mapping algorithms for Modbus. Included code snippets of the HAL implementation.</p>
+<hr />
+<h3>Testing</h3>
+<p>N/A</p>
+<hr />
+<h3>Problems Encountered</h3>
+<p>Formatting C code snippets and memory map tables in the documentation software was tedious.</p>
+<hr />
+<h3>Solutions Applied</h3>
+<p>Utilized markdown tables and syntax highlighting tools to ensure a professional appearance.</p>
+<hr />
+<h3>Deliverables</h3>
+<p>Complete hardware and compiler integration chapters.</p>
+<hr />
+<h3>Knowledge Gained</h3>
+<p>Gained experience in writing technical specifications for embedded systems.</p>
+<hr />
+<h3>Next Day Plan</h3>
+<p>Write the final testing and results chapter.</p>
+<hr />
+<h3>Time Distribution</h3>
+<ul>
+<li><strong>Research:</strong> 1.5 hours</li>
+<li><strong>Implementation:</strong> 0.0 hours</li>
+<li><strong>Testing:</strong> 0.0 hours</li>
+<li><strong>Documentation:</strong> 5.0 hours</li>
+</ul>
+<div style='page-break-after: always;'></div>
+
+<h2>DAY 26</h2>
+<p><strong>Date:</strong> 26 July 2026<br />
+<strong>Working Hours:</strong> 7.0 hours<br />
+<strong>Objective:</strong> Testing, Results Documentation, and Final Review.  </p>
+<hr />
+<h3>Background</h3>
+<p>The project report must conclude with proof that the system works as intended.</p>
+<hr />
+<h3>Research Activities</h3>
+<p>Gathered screenshots, performance metrics, and logs from previous testing phases.</p>
+<hr />
+<h3>Concepts Learned</h3>
+<ol>
+<li>Performance Metrics: API latency, UI framerate, compile times.</li>
+<li>Usability Metrics: Time taken to create a circuit manually vs. using AI.</li>
+</ol>
+<hr />
+<h3>Engineering Analysis</h3>
+<p>Providing quantitative data (e.g., 'AI generates a single motor circuit 4x faster than manual dragging') strongly supports the project's core hypothesis.</p>
+<hr />
+<h3>Implementation Work</h3>
+<p>Documented the E2E test results, latency optimizations (Smart Trigger), and visual comparisons of the UI. Formatted the final report.</p>
+<hr />
+<h3>Testing</h3>
+<p>Proofread the entire document for technical accuracy and tone.</p>
+<hr />
+<h3>Problems Encountered</h3>
+<p>The results section needed to honestly reflect the project's current state without sounding like a failure.</p>
+<hr />
+<h3>Solutions Applied</h3>
+<p>Wrote a dedicated 'Known Limitations' section. Clearly stated: 'The complete AI assistant is not completed yet. While sequential commands execute flawlessly, the system throws a fatal multiple task cannot be done at the same time error when tasked with parallel generation.'</p>
+<hr />
+<h3>Deliverables</h3>
+<p>Final, polished project report chapters, accurately reflecting the current engineering state.</p>
+<hr />
+<h3>Knowledge Gained</h3>
+<p>Learned how to present engineering results effectively and document technical debt.</p>
+<hr />
+<h3>Next Day Plan</h3>
+<p>Package the project, generate the final HTML/PDF, and prepare for submission.</p>
+<hr />
+<h3>Time Distribution</h3>
+<ul>
+<li><strong>Research:</strong> 1.0 hours</li>
+<li><strong>Implementation:</strong> 0.0 hours</li>
+<li><strong>Testing:</strong> 1.0 hours</li>
+<li><strong>Documentation:</strong> 5.0 hours</li>
+</ul>
+<div style='page-break-after: always;'></div>
+
+<h2>DAY 27</h2>
+<p><strong>Date:</strong> 27 July 2026<br />
+<strong>Working Hours:</strong> 5.5 hours<br />
+<strong>Objective:</strong> Project Packaging and Final Submission Prep.  </p>
+<hr />
+<h3>Background</h3>
+<p>The final step is to compile all engineering work into the required deliverable formats.</p>
+<hr />
+<h3>Research Activities</h3>
+<p>Reviewed university submission guidelines.</p>
+<hr />
+<h3>Concepts Learned</h3>
+<ol>
+<li>Source Code Packaging: Cleaning directories (node_modules, build artifacts) before zipping.</li>
+<li>Documentation Generation: Compiling markdown/latex into a single professional document.</li>
+</ol>
+<hr />
+<h3>Engineering Analysis</h3>
+<p>The project directory is massive. A clean script is needed to package the source code properly. The diary and report must be finalized.</p>
+<hr />
+<h3>Implementation Work</h3>
+<p>Wrote a Node.js script to clean the project workspace. Compiled all daily logs into this single comprehensive engineering diary.</p>
+<hr />
+<h3>Testing</h3>
+<p>Verified the HTML formatting, page breaks, and image resolutions.</p>
+<hr />
+<h3>Problems Encountered</h3>
+<p>Reviewing the final diary highlighted that the AI agent concurrency issue was the most significant roadblock encountered.</p>
+<hr />
+<h3>Solutions Applied</h3>
+<p>Added explicit mentions of the 'multiple task cannot be done at the same time' error to the Future Scope document, outlining a proposed architecture utilizing Web Workers and React batched state updates to solve it in v2.0.</p>
+<hr />
+<h3>Deliverables</h3>
+<p>Final Source Code Zip, AgenticPLC Architecture Report, and this updated Engineering Diary reflecting the exact current state.</p>
+<hr />
+<h3>Knowledge Gained</h3>
+<p>Successfully completed a full-lifecycle engineering R&amp;D project, including the documentation of unresolved engineering challenges.</p>
+<hr />
+<h3>Next Day Plan</h3>
+<p>Project documentation phase completed. Prepare for final presentation/viva.</p>
+<hr />
+<h3>Time Distribution</h3>
+<ul>
+<li><strong>Research:</strong> 0.5 hours</li>
+<li><strong>Implementation:</strong> 2.0 hours</li>
+<li><strong>Testing:</strong> 1.0 hours</li>
+<li><strong>Documentation:</strong> 2.0 hours</li>
+</ul>
+<div style='page-break-after: always;'></div></body></html>

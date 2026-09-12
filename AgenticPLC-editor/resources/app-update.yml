@@ -1,0 +1,4 @@
+owner: Autonomy-Logic
+repo: openplc-editor
+provider: github
+updaterCacheDirName: open-plc-editor-updater
